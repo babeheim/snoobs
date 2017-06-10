@@ -2,3 +2,5 @@
 /simulate_data/*
 /decompose_data/*
 /analyze_data/*
+
+*.pdf
