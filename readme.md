@@ -1,4 +1,4 @@
-go-firstmove
+snoobs
 ============
 
 Analysis script for "Evolutionary Decomposition and the Mechanisms of Cultural Change", by Bret Beheim and Ryan Baldini, in Cliodynamics, Volume 3: 217–233, available at https://escholarship.org/uc/item/5w49c6wt
