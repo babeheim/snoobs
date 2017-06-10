@@ -29,6 +29,6 @@ with the project folder as the working directory. If all goes well, each step of
 
 By default the analysis will delete all temporary files and folders, but if you want to see all intermediate steps you can disable this by flipping the `save_temp` variable in 'project_variables.r' from `FALSE` to `TRUE`.
 
-The total time until completion will vary by machine.
+The total time until completion will vary by machine. It takes about 30 minutes for me.
 
 The project is maintained by Bret Beheim (beheim@gmail.com) and is hosted at https://github.com/babeheim.
