@@ -655,4 +655,4 @@ dir_init('./output')
 files <- list.files('./temp', full.names=TRUE)
 file.copy(files, './output')
 
-print("analysis complete")
+print(paste(Sys.time(), "- analysis complete"))

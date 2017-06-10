@@ -15,4 +15,5 @@ frq.table <- decomposer(prepped.data)
 
 write.csv(frq.table, './output/frequency_table.csv', row.names=FALSE)
 
-print("data decomposed")
+
+print(paste(Sys.time(), "- data decomposed"))

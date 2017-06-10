@@ -227,7 +227,7 @@ while( should.simulate.day ){
                 event.log <- c(event.log, paste("Day ", day, ": ", ifelse(pop.reg[baby.surname, "male"]==1, "Male ", "Female "), baby.surname, " has been born to female ", pop.reg[baby.surname, "mom"] , " and male ", pop.reg[baby.surname, "dad"], ".", sep=""))
             }
             census.n.births <- census.n.births + 1    
-            pop.reg[mom, "counter"] <- NA
+         	pop.reg[mom, "counter"] <- NA
         }
     }
     
@@ -482,7 +482,7 @@ dir_init('./output')
 my.data <- census.end.census
 write.csv(my.data, "./output/raw_data.csv", row.names=FALSE)
 
-print('simulation complete')
+print(paste(Sys.time(), "- simulation complete"))
 
 if(diagnostics){
     par(mfrow=c(2,1))
