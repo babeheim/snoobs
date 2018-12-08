@@ -38,7 +38,7 @@ ehthumbs.db
 Thumbs.db
 
 /output/*
-/simulate_data/*
-/decompose_data/*
-/analyze_data/*
+
+*/output/*
+*/temp/*
 
