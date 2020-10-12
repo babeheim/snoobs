@@ -5,8 +5,10 @@ Analysis script for "Evolutionary Decomposition and the Mechanisms of Cultural C
 
 Requirements:
 - R (3.3.1 or greater) https://cran.r-project.org/
-- rethinking package (v1.59 or greater), http://xcelab.net/rm/software/
-- bbmle package, available on CRAN
+- `rethinking` R package (v1.59 or greater), http://xcelab.net/rm/software/
+- `bbmle` R package, available on CRAN
+- `tictoc` R package, available on CRAN
+- `RColorBrewer` R package, available on CRAN
 - LaTeX, https://www.latex-project.org/
 
 Instructions:
