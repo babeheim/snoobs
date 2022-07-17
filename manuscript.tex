@@ -70,13 +70,13 @@ which decomposes the observed change in population size into four measurable flu
 In observing evolution, we require that within each census, each individual $i$ possesses some observable phenotypic value, $\phi_i$.  This may represent their ethnicity, age, height, athletic ability, income, religion, occupation, number of livestock owned, political opinions, consumer preferences, or any other quantifiable trait whose population properties we care to track.  Since we leave the phenotype unspecified, this analysis applies to any species of organism, though we will focus here on tracking human phenotypic trajectories.  Given this goal, we seek a decomposition equation for the intercensus change in the \textit{mean phenotype} of the population, $\overline{\phi}$, analogous to equation \ref{eq:demo}.  Below we present the derivation for one such equation, the RTDICE decomposition.\footnote{RTDICE stands for ``reproduction, transmission, death, immigration, change, emigration,'' six categories that capture all evolution on the phenotypic distribution.  Here ``change'' means intercensus phenotypic change within individuals.}
 
 For the purpose of exposition, imagine we sum the phenotypic value of every individual in a population at a particular time, such that $\phi = \sum \phi_i$.  We take it as self-evident that this aggregate value can change in only five ways: births and immigrants add their phenotypes, emigrants and deaths subtract theirs, and individuals who remain in the population may change their phenotype between the two periods.\footnote{To be precise, in our analysis all individuals who join the population between time period $t$ and $t+1$ are classified as ``births'' if both their parents were in the population in time $t$, and otherwise are ``immigrants.''  All individuals who were present in the population at time $t$ and left it before $t+1$ are either deaths or emigrants depending on how they left.  With only periodic census data, individuals who both joined and left the population intercensus are invisible to our analysis.}  Thus the aggregate phenotype at the next census, $\phi'$, is given by
-	\[\phi' = \phi + \phi_B - \phi_D  + \phi_I + \rho - \phi_E, 
+  \[\phi' = \phi + \phi_B - \phi_D  + \phi_I + \rho - \phi_E, 
 \]
 where $\phi_B$ is the sum of phenotypes of intercensus births (as measured at $t+1$), $\phi_D$ of intercensus deaths (using their phenotypes at time $t$), and likewise for immigrants and emigrants.  For those who survived from $t$ to $t+1$, $\rho$ is the sum of the differences between their phenotypes at the two times.  Using equation \ref{eq:demo}, we can express the population growth ratio (or finite rate of increase) as 
-	\[G = N'/N  = 1 + b - d + i - e
+  \[G = N'/N  = 1 + b - d + i - e
 \]
 where $b=B/N$ is the births between $t$ and $t+1$ per member of the population in time $t$, and so forth for $d$, $i$, and $e$.  Thus, we can write the change in the mean phenotype of the population, $\Delta \overline{\phi} = \overline{\phi}' - \overline{\phi}$, as
-	\[\Delta \overline{\phi} = \frac{1}{G}\left(\overline{\phi} + b\overline{\phi}_B - d\overline{\phi}_D + i\overline{\phi}_I + c\overline{\rho} - e\overline{\phi}_E - \overline{\phi}(1 + b - d + i - e)\right).
+  \[\Delta \overline{\phi} = \frac{1}{G}\left(\overline{\phi} + b\overline{\phi}_B - d\overline{\phi}_D + i\overline{\phi}_I + c\overline{\rho} - e\overline{\phi}_E - \overline{\phi}(1 + b - d + i - e)\right).
 \]
 Let $c=1-d-e$ represent proportion of the population from time $t$ remaining at time $t+1$.  Note that the term $\overline{\phi}_B= \phi_B/B$ represents the mean phenotype among births, $\overline{\phi}_D$ among deaths, and so on.  Rearranging and simplifying gives 
 \begin{equation} \label{eq:BDICE}
@@ -86,7 +86,7 @@ G \Delta \overline{\phi} =  b(\overline{\phi}_B - \overline{\phi}) - d(\overline
 Equation \ref{eq:BDICE} decomposes mean phenotypic change as the demographer's equation does for population change.  The first term on the right, $b(\overline{\phi}_B - \overline{\phi})$, can be thought of as the effect of births on mean phenotype, the next term, deaths, then immigration, individual change, and emigration, respectively.  Like the left side of the equation, each term on the right is a product of a rate per capita and a difference.  When applied to census data, equation \ref{eq:BDICE} allows us to see how births, deaths, migration and individual change separately\footnote{As in the demographer's equation, some intercensus events are often unknown, so these terms are not truly ``independent" in any real population. We clarify this point in the Discussion.} affect the trajectory of mean phenotype.  
 
 Provided parent-offspring relationships are known, we can further decompose the birth term in equation \ref{eq:BDICE} to distinguish the effect of differential reproductive success of the parents (RS) from the deviation of the child phenotype (transmission bias).  To be specific, the term $\overline{\phi}_B$ can be calculated either by dividing the aggregate of offspring phenotypes by the number of offspring, or expressed using parent phenotypes and a transmission bias term.  If $\delta_k$ represents the difference between the phenotype of each child $k$ and the average phenotype of its parents, then the mean phenotype of births is
-	\[\overline{\phi}_B = \frac{1}{bN} \sum^N \frac{f_i}{2} \phi_i + \frac{1}{B} \sum^B \delta_k = \overline{\phi}_{R} + \overline{\delta}.
+  \[\overline{\phi}_B = \frac{1}{bN} \sum^N \frac{f_i}{2} \phi_i + \frac{1}{B} \sum^B \delta_k = \overline{\phi}_{R} + \overline{\delta}.
 \]
 where $f_i$ is the number of offspring of individual $i$.\footnote{The division by two is necessary for offspring with two parents.}  The term $\overline{\phi}_{R}$ weights parent phenotypes by their reproductive output, while $\overline{\delta}$ captures the difference between offspring and their midparents, on the average.  This distinction provides us the full RTDICE evolutionary decomposition,
 \begin{equation}  \label{eq:RTDICE}
@@ -99,7 +99,7 @@ It is worth recognizing that most of the terms in equation \ref{eq:RTDICE} can b
 
 Equation \ref{eq:RTDICE} is true for any measurable character for any population of a sexually reproducing species (and is easily modified for asexual or unisex populations), and provides insight into the nature of the evolutionary forces at work.  A large magnitude RS term, for example, may indicate the operation of fecundity or sexual selection.  The mortality term could be large or small due to viability selection on the phenotype's distribution.  In a genetic context, transmission bias may indicate mutation or meiotic drive, while individual change gives us knowledge of the role of ontogeny.  For culturally-transmitted phenotypes, both the transmission bias and individual change terms may indicate the presence of learning biases.  Emigration and immigration have less connection to Darwinian forces, but may indicate the importance of dispersal or source-sink effects.  In short, provided we have individual-level data, we can use evolutionary decomposition to profile important trends within data straight away (Table \ref{tab:DemoData} \& \ref{tab:DemoDecomp}).  
 
-		\begin{table}[htbp]
+    \begin{table}[htbp]
     \begin{center}
     \begin{footnotesize}
     \begin{tabular}{cccc}
@@ -118,41 +118,41 @@ Equation \ref{eq:RTDICE} is true for any measurable character for any population
     Andrew      &  & 1     & (\textit{immigrant})\\
     Ian      &     & 1     & Edward, Susan \\
     \hline
-		Mean Phenotype: & 0.6 & 0.375 & \\
-		\hline
-		
-	 	\end{tabular}
-	  \caption{A hypothetical dataset with individual-level census data for two time periods, measuring a binary phenotype $\phi_i$ (note that $\phi_i$ can be discrete or continuous in this analysis).  Jeff, Mike, and Ian are born intercensus.  Provided we can identify individuals across multiple time periods and also establish parentage, we can apply equation \ref{eq:RTDICE} to calculate the decomposition terms for the change in mean phenotype in the population (Table 2).}
-		\label{tab:DemoData}
-		\end{footnotesize}
-		\end{center}
-		\end{table}
+    Mean Phenotype: & 0.6 & 0.375 & \\
+    \hline
+    
+     \end{tabular}
+    \caption{A hypothetical dataset with individual-level census data for two time periods, measuring a binary phenotype $\phi_i$ (note that $\phi_i$ can be discrete or continuous in this analysis).  Jeff, Mike, and Ian are born intercensus.  Provided we can identify individuals across multiple time periods and also establish parentage, we can apply equation \ref{eq:RTDICE} to calculate the decomposition terms for the change in mean phenotype in the population (Table 2).}
+    \label{tab:DemoData}
+    \end{footnotesize}
+    \end{center}
+    \end{table}
 
 
-	\begin{table}[htbp]
+  \begin{table}[htbp]
   \begin{footnotesize}
   \begin{center}
   \begin{tabular}{lrr}
     
   \textit{Term from equation \ref{eq:RTDICE}} & \textit{Effect} & \textit{Calculation}\\
   \hline
-	Reproductive Success & 0.12	&	$b(\overline{\phi}_{R} - \overline{\phi})$ \\
-	Transmission Bias & -0.20	&	$b\overline{\delta}$ \\
-	Death & 0.12	&	$-d(\overline{\phi}_D - \overline{\phi})$ \\
-	Immigration & 0.08	&	$i(\overline{\phi}_I - \overline{\phi})$\\
-	Individual Change &	-0.40	&	$c\overline{\rho}$ \\
-	Emigration & -0.08	&	$-e(\overline{\phi}_E - \overline{\phi})$\\
-	\hline
-	Weighted Mean Change & $1.6 \times -0.225$ &	$G \Delta \overline{\phi}$\\
+  Reproductive Success & 0.12  &  $b(\overline{\phi}_{R} - \overline{\phi})$ \\
+  Transmission Bias & -0.20  &  $b\overline{\delta}$ \\
+  Death & 0.12  &  $-d(\overline{\phi}_D - \overline{\phi})$ \\
+  Immigration & 0.08  &  $i(\overline{\phi}_I - \overline{\phi})$\\
+  Individual Change &  -0.40  &  $c\overline{\rho}$ \\
+  Emigration & -0.08  &  $-e(\overline{\phi}_E - \overline{\phi})$\\
+  \hline
+  Weighted Mean Change & $1.6 \times -0.225$ &  $G \Delta \overline{\phi}$\\
   
   \end{tabular}%
   \caption{Feeding the data from table 1 into equation \ref{eq:RTDICE}, we decompose the evolutionary change of -0.225 into the six terms on the right in the above table.  Emigration and immigration effectively cancel each other out, and though individuals with a phenotype value of 1 had more children (positive RS term) and died less (positive mortality term), this is more than offset by the fact their children tend to be phenotype 0's (negative transmission bias).  That, coupled with a unanimous change to phenotype 0 among the three survivors from time $t$, causes the population mean to decrease by 22.5 percentage points.  Because the decomposed terms \textit{must} sum to the observed change under all circumstances, we can ensure the calculations are correct.}
   \label{tab:DemoDecomp}
   \end{center}
   \end{footnotesize}
-	\end{table}%
-	
-	
+  \end{table}%
+  
+  
 \section{An Island Simulation: The Rise of Snoobism}
 
 One application of this decomposition analysis is assessing the practical importance of different evolutionary forces. In human cultural evolution, researchers often discuss how beliefs and behaviors can successfully diffuse in multiple ways; vertically, through stable inheritance from parents to offspring, or horizontally/obliquely within a social network \citep{richerson2005not}.  As such, when viewing the prevalence of a particular trait over time, we wish to know exactly how much of its trajectory can be attributed to the relative reproductive success of its practitioners, how much to relative horizontal or oblique adoption, and how much to relative migration (e.g.~\citealp{stark1996rise, hout2001demographic}).  Because contrasting evolutionary forces enter equation \ref{eq:RTDICE} through different terms, we can directly and precisely compare their relative consequences if we have the right data.  
@@ -167,7 +167,7 @@ Following Ozgul, et al.~\citeyearpar{ozgul2009dynamics}, we contend that evoluti
 
 \begin{figure}[t]
 \begin{center} 
-\includegraphics[scale=0.6]{FigSnoobCol.pdf}
+\includegraphics[scale=0.6]{assets/FigSnoobCol.pdf}
 \caption{(a) The population frequency of a binary cultural trait, Snoobism, observed over time, superimposed with the nonzero decomposition terms from the RTDICE equation.  Bars stacked above the Snoob frequency line represent positive magnitudes, and stacked below it, negative.  Since each bar represents one of the terms of equation \ref{eq:RTDICE} (divided by $G$), their sum steers the direction of the frequency line.  For clarity, the bars are exaggerated to the scale in (b), which shows means, 5th, 25th, 75th and 95th percentiles of the observed annual decomposition magnitudes for each term.}
 \label{fig:Snoob}
 \end{center}
@@ -212,7 +212,7 @@ Of course, in real populations such processes are probably all in effect to vary
     \hline
     \end{tabular}%
     \caption{Top four models among the thirteen fitted to the simulated census data, as measured by AIC$_c$ and BIC score (see ESM for full model list).  Each model $M$ of the thirteen is embedded in the equation $p=L(M) + (1-L)(\phi_{i,t})$, where $p$ describes the conditional probability an individual will be a Snoob in the next census, per $\phi_{i, t+1} \sim \mathrm{Binomial}(1, p)$.  The top four are all social learning models, each with a conformity coefficient $\beta$ of comparable meaning.} 
-		\label{tab:Learning}
+    \label{tab:Learning}
     \end{footnotesize}
 
 \end{table}
