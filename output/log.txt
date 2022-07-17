@@ -1,8 +1,0 @@
-project: SnoobSim decomposition analysis
-start_time: 2020-10-12 10:36:13
-finish_time: 2020-10-12 11:02:30
-events:
-- simulate data: 1038.653 sec elapsed
-- decompose simulation data: 22.246 sec elapsed
-- analyze data: 512.636 sec elapsed
-- make manuscript: 3.587 sec elapsed

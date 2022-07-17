@@ -15,11 +15,11 @@ conception <- function(asf, reg, fecund.women.rows){
 
 }
 
-grim.reaper <- function(asm, reg, mortality.bias.male, mortality.bias.snoob){
+grim.reaper <- function(asm, reg, mortality.bias.male, mortality.bias.snoob) {
 
-  male <- reg[active.rows,"male"]
-  snoob <- reg[active.rows,"snoob"]
-  age.cats <- reg[active.rows, "age.cat"]
+  male <- reg$male[active.rows]
+  snoob <- reg$snoob[active.rows]
+  age.cats <- reg$age.cat[active.rows]
   
   baseline <- (asm[as.character(age.cats)]/1000)/365
   alpha = log(baseline/(1- baseline))
@@ -51,75 +51,65 @@ baby.maker <- function(mom.id, dad.id, data){
   age <- 0
   age.cat <- 0
   died <- NA
-  male <- rbinom(1,1,prob=0.5)
+  male <- rbinom(1, 1, prob = 0.5)
   mate <- NA
   counter <- NA
   
   # snoob inheritance
-  mom.snoob <- data[mom.id, "snoob"]
-  dad.snoob <- data[dad.id, "snoob"]
-  midparent.snoob <- mean(c(mom.snoob, dad.snoob))  # GOD DAMN that was a hard bug to solve...
+  mom.snoob <- data$snoob[mom.id]
+  dad.snoob <- data$snoob[dad.id]
+  midparent.snoob <- mean(c(mom.snoob, dad.snoob))
   if(midparent.snoob == 1) midparent.snoob <- 0.9999
   if(midparent.snoob == 0) midparent.snoob <- 0.0001
   baseline.trans.bias <- midparent.snoob
   alpha <- log(baseline.trans.bias/(1-baseline.trans.bias))
   prob.kid.is.snoob <- exp(alpha + transmission.bias.snoob)/(1+ exp(alpha + transmission.bias.snoob))
-  snoob <- rbinom(1,1,prob=prob.kid.is.snoob)
+  snoob <- rbinom(1, 1, prob = prob.kid.is.snoob)
 
   newborn <- c(state, mom.id, dad.id, age, age.cat, died, male, mate, counter, snoob)
   return(newborn)
 }
 
 
-mate.finder <- function(mom.id, reg){  # this seems the most inefficient of the simulator's code...it has to run mom by mom, which is quite a lot of them...
+mate.finder <- function(mom.id, reg) {
+  # this seems the most inefficient of the simulator's code...it has to run mom by mom, which is quite a lot of them...
   
   current.mate <- NA
   
-  moms.snoob <- reg[mom.id, "snoob"]
+  moms.snoob <- reg$snoob[mom.id]
   
-  last.mate <- reg[mom.id, "mate"]
-  if(!is.na(last.mate)){
-    if(reg[last.mate, "state"] == 1 & reg[last.mate, "age"] > 15*365 & reg[last.mate, "age"] < 60*365){
+  last.mate <- reg$mate[mom.id]
+  if (!is.na(last.mate)) {
+    if (reg$state[last.mate] == 1 & reg$age[last.mate] > 15*365 & reg$age[last.mate] < 60*365) {
       current.mate <- last.mate
     }
   }
   # if the last mate exists, is alive and within the age range, he's your man
 
-  if(is.na(current.mate)){  
+  if (is.na(current.mate)) {
     # "available" means within age range, alive, male
     # male.mating.bias <- 1
     
-    available.men <- active.rows[which( reg[active.rows, "male"]==1 & reg[active.rows, "age"] >= reproductive.min.age*365 & reg[active.rows, "age"] < 60*365 )]
-          
-    if(length(available.men)>0){
+    available.men <- active.rows[which(reg$male[active.rows] == 1 & reg$age[active.rows] >= reproductive.min.age*365 & reg$age[active.rows] < 60*365)]
+
+    if (length(available.men) > 0) {
       current.mate <- available.men[1]
-      if(length(available.men) > 1){
-        available.men.traits <- reg[available.men,"snoob"]
+      if (length(available.men) > 1){
+        available.men.traits <- reg$snoob[available.men]
         n.men <- length(available.men)
-      
+
         prob.choose.snoob <- mate.similarity.bias.snoob*moms.snoob + (1-moms.snoob)*(1-mate.similarity.bias.snoob)
         prob.choose.nonsnoob <- 1 - prob.choose.snoob
-  
+
         prob.is.chosen <- rep(0.5, n.men)
         prob.is.chosen[available.men.traits==1] <- prob.choose.snoob
         prob.is.chosen[available.men.traits==0] <- prob.choose.nonsnoob
-                
+
         current.mate <- sample_safe(available.men, 1, prob=prob.is.chosen)
       }
     } else {
       current.mate <- NA
     }
   }
-  current.mate  
-
-}
-
-
-
-# height function: 
-
-height.fun <- function(age, h.gene){
-  if(any(age>100)) age <- age/365
-  heights <- h.gene*exp(-3 + .2*age)/(1 + exp(-3+.2*age))
-  heights
+  current.mate
 }

@@ -1,25 +1,25 @@
 
 cens <- read.csv("raw_data.csv")
 
-deco <- BDICE.sim.decomp.prepper(cens, phenotype = "snoob")
+prep <- prep_census_data(cens, phenotype = "snoob")
 
 # how do these tables differ? raw includes babies who died before their first census
 # really that should be excluded since we dont know about them!
-# deco does not include variables like age or sex!
+# prep does not include variables like age or sex!
 
-deco <- as.data.frame(deco)
+prep <- as.data.frame(prep)
 
 cens$key <- paste(cens$census, cens$id)
-deco$key <- paste(deco$census, deco$id)
+prep$key <- paste(prep$census, prep$id)
 
-deco$age_days <- cens$age[match(deco$key, cens$key)]
-deco$age <- round(deco$age_days / 365, 2)
-deco$male <- cens$male[match(deco$key, cens$key)]
-deco$snoob <- deco$phi
+prep$age_days <- cens$age[match(prep$key, cens$key)]
+prep$age <- round(prep$age_days / 365, 2)
+prep$male <- cens$male[match(prep$key, cens$key)]
+prep$snoob <- prep$phi
 
-deco <- select(deco, -key)
+prep <- select(prep, -key)
 
-write.csv(deco, "analysis_data.csv", row.names = FALSE)
+write.csv(prep, "analysis_data.csv", row.names = FALSE)
 
-frq.table <- decomposer(deco)
+frq.table <- decompose_prepped_census(prep)
 write.csv(frq.table, "figures/frequency_table.csv", row.names = FALSE)
