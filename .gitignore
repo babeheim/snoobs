@@ -37,8 +37,9 @@
 ehthumbs.db
 Thumbs.db
 
-/output/*
+figures/
 
-*/output/*
-*/temp/*
+*.pdf
 
+raw_data.csv
+prepped_data.csv
