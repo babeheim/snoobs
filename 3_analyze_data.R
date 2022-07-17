@@ -372,7 +372,6 @@ if (any(abs(cens$phi_bar - 0.5) < 0.1)) {
   curve(my.dzpois(k, lambda=exp(b0 + b1*(x-32.67694) + b2*(x-32.67694)^2 + b3*1 + b4*0 + b5*plot.phibar), a=alpha), from=11, to=60, col="maroon1", add=T)
   curve(my.dzpois(k, lambda=exp(b0 + b1*(x-32.67694) + b2*(x-32.67694)^2 + b3*0 + b4*0 + b5*plot.phibar), a=alpha), from=11, to=60, col="maroon1", lty=1, add=T)
 
-
   k <- 2
   plot.phibar <- 0.5
   will.have.k <- as.numeric(dk$n_kids==k)
@@ -452,7 +451,6 @@ m4 <-  mle2(y ~ dbinom(1, prob=L*(exp(b0 + b1*x)/(1+exp(b0 + b1*x))) + (1-L)*z )
 
 cat("fit change model m5\n")
 
-# why is d$pop_size the wrong size?? bug
 m5 <- mle2(y ~ dbinom(1, prob=L*(1/(1+exp(b0 + b1*n))) + (1-L)*z), data=list(y = d$will_be_snoob, n = d$pop_size, z = d$snoob), start=list(L=0.2, b0=0.3, b1=0), trace=FALSE)
 
 cat("fit change model m6\n")
@@ -491,51 +489,41 @@ cat("create figure learning.png\n")
 
 png("./figures/learning.png", height=15, width=20, units='cm', res=300)
 
-par(mfrow=c(1,2))
+cfact <- data.frame(
+  frq_snoob = seq(0.01, 0.99, length=100),
+  pr_stay_snoob_mu = NA,
+  pr_stay_snoob_lb = NA,
+  pr_stay_snoob_ub = NA,
+  pr_to_snoob_mu = NA,
+  pr_to_snoob_lb = NA,
+  pr_to_snoob_ub = NA
+)
+
+post <- sample.qa.posterior(m1)
+
+for (i in seq_len(nrow(cfact))) {
+  prob <- post$L * (cfact$frq_snoob[i])^(post$B)/(cfact$frq_snoob[i]^post$B + (1 - cfact$frq_snoob[i])^post$B)
+  cfact$pr_to_snoob_mu[i] <- mean(prob)
+  cfact$pr_to_snoob_lb[i] <- HPDI(prob)[1]
+  cfact$pr_to_snoob_ub[i] <- HPDI(prob)[2]
+  prob <- post$L * (cfact$frq_snoob[i])^(post$B)/(cfact$frq_snoob[i]^post$B + (1 - cfact$frq_snoob[i])^post$B) + (1 - post$L)
+  cfact$pr_stay_snoob_mu[i] <- mean(prob)
+  cfact$pr_stay_snoob_lb[i] <- HPDI(prob)[1]
+  cfact$pr_stay_snoob_ub[i] <- HPDI(prob)[2]
+}
+
+par(mfrow = c(1, 2))
 
 plot(cens$snoob_to_snoob ~ cens$phi_bar, ylim=c(0.85, 1), ylab="Prob. Remaining Snoob", xlab="Mean Pop. Frq", col="blue", las=1, frame.plot=F, xlim=c(.15, 1))
 
-# L * ( x^(B) / ( x^(B) + (1-x)^(B)) ) + (1-L) * z ) 
-# data=list(y = d$will_be_snoob, x = d$phi_bar, z=d$snoob)
-
-# L <- 0.104
-# D <- 0.619
-# curve( L * ( x + D*x*(1-x)*(2*x-1) )+ (1-L), from=0, to=1, col="dodgerblue", add=T)
-
-L <- 0.09996
-D <- 1.37388
-curve( L * ( x^D / (x^D + (1-x)^D) ) + ( 1 - L ), from=0, to=1, ylim=c(0,1), col="black", add=T)
-
-post <- sample.naive.posterior(m1)
-frqs <- seq(0.01, 0.99, length=100)
-
-s.p.lb <- rep(NA, length(frqs))
-s.p.ub <- rep(NA, length(frqs))
-
-# for(i in 1:length(frqs)){
-#   prob <- post$L*(frqs[i])^(post$B)/(frqs[i]^post$B + (1-frqs[i])^post$B)
-#   s.p.lb[i] <- HPDI(prob)[1]
-#   s.p.ub[i] <- HPDI(prob)[2]
-# }
-
-# points(frqs, s.p.lb, lty=1, type="l")
-# points(frqs, s.p.ub, lty=1, type="l")
+points(cfact$frq_snoob, cfact$pr_stay_snoob_mu, lty=2, type="l")
+points(cfact$frq_snoob, cfact$pr_stay_snoob_lb, lty=1, type="l")
+points(cfact$frq_snoob, cfact$pr_stay_snoob_ub, lty=1, type="l")
 
 plot(cens$non_to_snoob ~ cens$phi_bar, ylim=c(0,.15), ylab="Prob. Becoming Snoob", xlab="Mean Pop. Frq", col="blue", las=1, frame.plot=F, xlim=c(.15, 1))
 
-# L <- 0.104
-# D <- 0.619
-# curve(L*(x + D*x*(1-x)*(2*x-1)), from=0, to=1, ylim=c(0, 1), col="dodgerblue", add=T)
-
-L <- 0.09996
-D <- 1.37388
-curve(L*(x^D/(x^D + (1-x)^D)), from=0, to=1, ylim=c(0,1), col="black", add=T)
-
-# post <- sample.naive.posterior(m1)
-# frqs <- seq(0, 1, length=100)
-
-# ns.p.ci <- sapply(frqs, function(z) HPDI( post$L*(z)^(post$B)/(z^post$B + (1-z)^post$B)))
-# points(frqs, ns.p.ci[1,], lty=1, type="l")
-# points(frqs, ns.p.ci[2,], lty=1, type="l")
+points(cfact$frq_snoob, cfact$pr_to_snoob_mu, lty=2, type="l")
+points(cfact$frq_snoob, cfact$pr_to_snoob_lb, lty=1, type="l")
+points(cfact$frq_snoob, cfact$pr_to_snoob_ub, lty=1, type="l")
 
 dev.off()
