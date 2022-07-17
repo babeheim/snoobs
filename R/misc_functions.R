@@ -1,4 +1,8 @@
 
+sample_safe <- function(x, ...) {
+  x[sample.int(length(x), ...)]
+}
+
 
 age.pyramid <- function(ages, males, by.unit, sitename=""){
 

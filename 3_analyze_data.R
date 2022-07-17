@@ -1,18 +1,9 @@
 
-rm(list = ls())
-
-source("project_support.R")
-
-# why does the prepped data have fewer rows than the raw data? because we have to drop babies who died before their first census - they were recorded in the raw data because that just records all intercensus deaths, but technically they don't "exist" in the analysis because they were never alive at a census, so they have to go.
-
-# an interesting question: when you have a fit probability model, how do you plot expected outcomes?  You'd have to know the EV for the distribution, right?  I know a X ~ binomial's EV is p, and a X ~ normal's EV is mu, which allows me to plot linear Gaussian models and logistic models.  A poisson's EV is lambda.  Once I have a fit model, I can plot the EV against variation in some predictor variable like age.  But what if I don't know the model's EV??  I have a zero-inflated binomial and zero-inflated poisson in the mix...
-
 cat("load and prep simulation data\n")
 
 raw.data <- read.csv("raw_data.csv") # load the raw data
 prepped.data <- read.csv("prepped_data.csv") # also load in the prepped data (need both)
 
-# I want to know how many generations are rerpseented in the data...
 id.data <- raw.data[,"id"]
 dad.data <- raw.data[,"dad"]
 mom.data <- raw.data[,"mom"]
@@ -92,47 +83,47 @@ for (i in 1:(length(census.list) - 1)) {
 age.yr <- age/365
 
 
-# cat("fit mortality model m0\n")
-# m0 <- mle2(y ~ dbinom(1, prob=1/(1+exp(a))), data=list(y=will.die), start=list(a=0.1), trace=FALSE)
+cat("fit mortality model m0\n")
+m0 <- mle2(y ~ dbinom(1, prob=1/(1+exp(a))), data=list(y=will.die), start=list(a=0.1), trace=FALSE)
 
-# cat("fit mortality model m1\n")
-# m1 <- mle2(y ~ dbinom(1, prob=1/(1+exp(p1 + p2*cen(age.yr)))) , data=list(y=will.die), start=list(p1=4.8, p2=0), trace=FALSE)
+cat("fit mortality model m1\n")
+m1 <- mle2(y ~ dbinom(1, prob=1/(1+exp(p1 + p2*cen(age.yr)))) , data=list(y=will.die), start=list(p1=4.8, p2=0), trace=FALSE)
 
-# cat("fit mortality model m2\n")
-# m2 <- mle2(y ~ dbinom(1, prob=1/(1+exp(p1 + p2*cen(age.yr) + p3*cen(age.yr)^2))) , data=list(y=will.die), start=list(p1=4.8, p2=0, p3=0), trace=FALSE)
+cat("fit mortality model m2\n")
+m2 <- mle2(y ~ dbinom(1, prob=1/(1+exp(p1 + p2*cen(age.yr) + p3*cen(age.yr)^2))) , data=list(y=will.die), start=list(p1=4.8, p2=0, p3=0), trace=FALSE)
 
-# cat("fit mortality model m3\n")
-# m3 <- mle2(y ~ dbinom(1, prob=1/(1+exp(p1 + p2*cen(age.yr) + p3*cen(age.yr)^2 + p4*male))) , data=list(y=will.die), start=list(p1=4.8, p2=0, p3=0, p4=0), trace=FALSE)
+cat("fit mortality model m3\n")
+m3 <- mle2(y ~ dbinom(1, prob=1/(1+exp(p1 + p2*cen(age.yr) + p3*cen(age.yr)^2 + p4*male))) , data=list(y=will.die), start=list(p1=4.8, p2=0, p3=0, p4=0), trace=FALSE)
 
-# cat("fit mortality model m4\n")
-# m4 <- mle2(y ~ dbinom(1, prob=1/(1+exp(p1 + p2*cen(age.yr) + p3*cen(age.yr)^2 + p4*male + p5*snoob))) , data=list(y=will.die), start=list(p1=4.8, p2=0, p3=0, p4=0, p5=0), trace=FALSE) # warnings
+cat("fit mortality model m4\n")
+m4 <- mle2(y ~ dbinom(1, prob=1/(1+exp(p1 + p2*cen(age.yr) + p3*cen(age.yr)^2 + p4*male + p5*snoob))) , data=list(y=will.die), start=list(p1=4.8, p2=0, p3=0, p4=0, p5=0), trace=FALSE) # warnings
 
-# cat("fit mortality model m5\n")
-# m5 <- mle2(y ~ dbinom(1, prob=1/(1+exp(p1 + p2*cen(age.yr) + p3*cen(age.yr)^2 + p4*male + p5*snoob + p6*current.phibar))) , data=list(y=will.die), start=list(p1=4.8, p2=0, p3=0, p4=0, p5=0, p6=0), trace=FALSE) # warnings
+cat("fit mortality model m5\n")
+m5 <- mle2(y ~ dbinom(1, prob=1/(1+exp(p1 + p2*cen(age.yr) + p3*cen(age.yr)^2 + p4*male + p5*snoob + p6*current.phibar))) , data=list(y=will.die), start=list(p1=4.8, p2=0, p3=0, p4=0, p5=0, p6=0), trace=FALSE) # warnings
 
-# cat("fit mortality model m6\n")
-# m6 <- mle2(y ~ dbinom(1, prob=1/(1+exp(p1 + p2*cen(age.yr) + p3*cen(age.yr)^2 + p4*male + p5*snoob + p6*su(age.yr)^3))) , data=list(y=will.die), start=list(p1=4.8, p2=0, p3=0, p4=0, p5=0, p6=0), trace=FALSE) # warnings
-
-
+cat("fit mortality model m6\n")
+m6 <- mle2(y ~ dbinom(1, prob=1/(1+exp(p1 + p2*cen(age.yr) + p3*cen(age.yr)^2 + p4*male + p5*snoob + p6*su(age.yr)^3))) , data=list(y=will.die), start=list(p1=4.8, p2=0, p3=0, p4=0, p5=0, p6=0), trace=FALSE) # warnings
 
 
 
-# cat("fit mortality model m0z\n")
-# m0z <- mle2(y ~ my.dzbinom(1, prob=1/(1+exp(p1)), a=alpha), data=list(y=will.die), start=list(p1=0.1, alpha=0.1), trace=FALSE) # warnings
 
-# cat("fit mortality model m1z\n")
-# m1z <- mle2(y ~ my.dzbinom(1, prob=1/(1+exp(p1 + p2*cen(age))), a=alpha) , data=list(y=will.die), start=list(p1=3.14, p2=0, alpha=0.1), trace=FALSE) # warnings
 
-# # m2z <- mle2(y ~ my.dzbinom(1, prob=1/(1+exp(p1 + p2*cen(age.yr) + p3*cen(age.yr)^2)), a=alpha) , data=list(y=will.die), start=list(p1=3.66, p2=0, p3=0, alpha=0.1), trace=FALSE)
+cat("fit mortality model m0z\n")
+m0z <- mle2(y ~ my.dzbinom(1, prob=1/(1+exp(p1)), a=alpha), data=list(y=will.die), start=list(p1=0.1, alpha=0.1), trace=FALSE) # warnings
 
-# cat("fit mortality model m3z\n")
+cat("fit mortality model m1z\n")
+m1z <- mle2(y ~ my.dzbinom(1, prob=1/(1+exp(p1 + p2*cen(age))), a=alpha) , data=list(y=will.die), start=list(p1=3.14, p2=0, alpha=0.1), trace=FALSE) # warnings
+
+# m2z <- mle2(y ~ my.dzbinom(1, prob=1/(1+exp(p1 + p2*cen(age.yr) + p3*cen(age.yr)^2)), a=alpha) , data=list(y=will.die), start=list(p1=3.66, p2=0, p3=0, alpha=0.1), trace=FALSE)
+
+cat("fit mortality model m3z\n")
 # m3z <- mle2(y ~ my.dzbinom(1, prob=1/(1+exp(p1 + p2*cen(age.yr) + p3*cen(age.yr)^2 + p4*male)), a=alpha) , data=list(y=will.die), start=list(p1=5.39, p2=0, p3=0, p4=0, alpha=0.1), trace=FALSE) # warnings
 
-# cat("fit mortality model m4z\n")
-# m4z <- mle2(y ~ my.dzbinom(1, prob=1/(1+exp(p1 + p2*cen(age.yr) + p3*cen(age.yr)^2 + p4*male + p5*snoob)), a=1/(1+exp(alpha))) , data=list(y=will.die), start=list(p1=4.8, p2=0, p3=0, p4=0, p5=0, alpha=0.1), trace=FALSE) # warnings
+cat("fit mortality model m4z\n")
+m4z <- mle2(y ~ my.dzbinom(1, prob=1/(1+exp(p1 + p2*cen(age.yr) + p3*cen(age.yr)^2 + p4*male + p5*snoob)), a=1/(1+exp(alpha))) , data=list(y=will.die), start=list(p1=4.8, p2=0, p3=0, p4=0, p5=0, alpha=0.1), trace=FALSE) # warnings
 
-# cat("fit mortality model m5z\n")
-# m5z <- mle2(y ~ my.dzbinom(1, prob=1/(1+exp(p1 + p2*cen(age.yr) + p3*cen(age.yr)^2 + p4*male + p5*snoob + p6*current.phibar)), a=1/(1+exp(alpha))) , data=list(y=will.die), start=list(p1=4.8, p2=0, p3=0, p4=0, p5=0, p6=0, alpha=0.1), trace=FALSE) # warnings
+cat("fit mortality model m5z\n")
+m5z <- mle2(y ~ my.dzbinom(1, prob=1/(1+exp(p1 + p2*cen(age.yr) + p3*cen(age.yr)^2 + p4*male + p5*snoob + p6*current.phibar)), a=1/(1+exp(alpha))) , data=list(y=will.die), start=list(p1=4.8, p2=0, p3=0, p4=0, p5=0, p6=0, alpha=0.1), trace=FALSE) # warnings
 
 # AICtab(m0, m1, m2, m3, m4, m5, m0z, m1z, m2z, m3z, m4z, m5z, m6, weights=T)
 # compare(m0, m1, m2, m3, m4, m5, m0z, m1z, m2z, m3z, m4z, m5z, m6, nobs=length(will.die))
@@ -315,123 +306,124 @@ current.phibar <- current.phibar[-drop]
 
 age.yr <- age/365
 
-# cat("fit fertility model m0p\n")
-# m0p <- mle2(y ~ dpois(lambda=b0), data=list(y=n.kids), start=list(b0=0.2), trace=FALSE)
+cat("fit fertility model m0p\n")
+m0p <- mle2(y ~ dpois(lambda=b0), data=list(y=n.kids), start=list(b0=0.2), trace=FALSE)
 
-# cat("fit fertility model m0z\n")
-# m0z <- mle2(y ~ my.dzpois(lambda=b0, a=alpha), data=list(y=n.kids), start=list(b0=0.2, alpha=0.1), trace=FALSE)
+cat("fit fertility model m0z\n")
+m0z <- mle2(y ~ my.dzpois(lambda=b0, a=alpha), data=list(y=n.kids), start=list(b0=0.2, alpha=0.1), trace=FALSE)
 
-# cat("fit fertility model m0g\n")
-# m0g <- mle2(y ~ dgeom(prob=b0), data=list(y=n.kids), start=list(b0=0.2), trace=FALSE)
+cat("fit fertility model m0g\n")
+m0g <- mle2(y ~ dgeom(prob=b0), data=list(y=n.kids), start=list(b0=0.2), trace=FALSE)
 
-# cat("fit fertility model m1p\n")
-# m1p <- mle2(y ~ dpois(lambda=exp(b0 + b1*cen(age.yr))), data=list(y=n.kids), start=list(b0=0.2, b1=0), trace=FALSE)
+cat("fit fertility model m1p\n")
+m1p <- mle2(y ~ dpois(lambda=exp(b0 + b1*cen(age.yr))), data=list(y=n.kids), start=list(b0=0.2, b1=0), trace=FALSE)
 
-# cat("fit fertility model m1z\n")
-# m1z <- mle2(y ~ my.dzpois(lambda=exp(b0 + b1*cen(age.yr)), a=alpha), data=list(y=n.kids), start=list(b0=0.2, b1=0, alpha=0), trace=FALSE)
+cat("fit fertility model m1z\n")
+m1z <- mle2(y ~ my.dzpois(lambda=exp(b0 + b1*cen(age.yr)), a=alpha), data=list(y=n.kids), start=list(b0=0.2, b1=0, alpha=0), trace=FALSE)
 
-# cat("fit fertility model m1g\n")
-# m1g <- mle2(y ~ dgeom(prob=1/(1+exp(b0 + b1*cen(age.yr)))), data=list(y=n.kids), start=list(b0=0, b1=0), trace=FALSE)
+cat("fit fertility model m1g\n")
+m1g <- mle2(y ~ dgeom(prob=1/(1+exp(b0 + b1*cen(age.yr)))), data=list(y=n.kids), start=list(b0=0, b1=0), trace=FALSE)
 
-# cat("fit fertility model m2p\n")
-# m2p <- mle2(y ~ dpois(lambda=exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2)), data=list(y=n.kids), start=list(b0=0.2, b1=0, b2=0), trace=FALSE)
+cat("fit fertility model m2p\n")
+m2p <- mle2(y ~ dpois(lambda=exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2)), data=list(y=n.kids), start=list(b0=0.2, b1=0, b2=0), trace=FALSE)
 
-# cat("fit fertility model m2z\n")
-# m2z <- mle2(y ~ my.dzpois(lambda=exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2), a=alpha), data=list(y=n.kids), start=list(b0=0.2, b1=0, b2=0, alpha=0.1), trace=FALSE)
+cat("fit fertility model m2z\n")
+m2z <- mle2(y ~ my.dzpois(lambda=exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2), a=alpha), data=list(y=n.kids), start=list(b0=0.2, b1=0, b2=0, alpha=0.1), trace=FALSE)
 
-# cat("fit fertility model m2g\n")
-# m2g <- mle2(y ~ dgeom(prob=1/(1+exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2))), data=list(y=n.kids), start=list(b0=0.2, b1=0, b2=0), trace=FALSE)
+cat("fit fertility model m2g\n")
+m2g <- mle2(y ~ dgeom(prob=1/(1+exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2))), data=list(y=n.kids), start=list(b0=0.2, b1=0, b2=0), trace=FALSE)
 
-# cat("fit fertility model m3p\n")
-# m3p <- mle2(y ~ dpois(lambda=exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*snoob)), data=list(y=n.kids), start=list(b0=0.2, b1=0.01, b2=0, b3=0), trace=FALSE)
+cat("fit fertility model m3p\n")
+m3p <- mle2(y ~ dpois(lambda=exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*snoob)), data=list(y=n.kids), start=list(b0=0.2, b1=0.01, b2=0, b3=0), trace=FALSE)
 
-# cat("fit fertility model m3z\n")
-# m3z <- mle2(y ~ my.dzpois(lambda=exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*snoob), a=alpha), data=list(y=n.kids), start=list(b0=0.2, b1=0.01, b2=0, b3=0, alpha=0.1), trace=FALSE)
+cat("fit fertility model m3z\n")
+m3z <- mle2(y ~ my.dzpois(lambda=exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*snoob), a=alpha), data=list(y=n.kids), start=list(b0=0.2, b1=0.01, b2=0, b3=0, alpha=0.1), trace=FALSE)
 
-# cat("fit fertility model m3g\n")
-# m3g <- mle2(y ~ dgeom(prob=1/(1+exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*snoob))), data=list(y=n.kids), start=list(b0=0.0, b1=0.00, b2=0, b3=0), trace=FALSE)
+cat("fit fertility model m3g\n")
+m3g <- mle2(y ~ dgeom(prob=1/(1+exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*snoob))), data=list(y=n.kids), start=list(b0=0.0, b1=0.00, b2=0, b3=0), trace=FALSE)
 
-# cat("fit fertility model m4p\n")
-# m4p <- mle2(y ~ dpois(lambda=exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*snoob + b4*male)), data=list(y=n.kids), start=list(b0=0.2, b1=0.01, b2=0, b3=0, b4=0), trace=FALSE)
+cat("fit fertility model m4p\n")
+m4p <- mle2(y ~ dpois(lambda=exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*snoob + b4*male)), data=list(y=n.kids), start=list(b0=0.2, b1=0.01, b2=0, b3=0, b4=0), trace=FALSE)
 
-# cat("fit fertility model m4z\n")
-# m4z <- mle2(y ~ my.dzpois(lambda=exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*snoob + b4*male), a=alpha), data=list(y=n.kids), start=list(b0=0.2, b1=0.01, b2=0, b3=0, b4=0, alpha=0.1), trace=FALSE)
+cat("fit fertility model m4z\n")
+m4z <- mle2(y ~ my.dzpois(lambda=exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*snoob + b4*male), a=alpha), data=list(y=n.kids), start=list(b0=0.2, b1=0.01, b2=0, b3=0, b4=0, alpha=0.1), trace=FALSE)
 
-# cat("fit fertility model m4g\n")
-# m4g <- mle2(y ~ dgeom(prob=1/(1+exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*snoob + b4*male))), data=list(y=n.kids), start=list(b0=0.2, b1=0.01, b2=0, b3=0, b4=0), trace=FALSE)
+cat("fit fertility model m4g\n")
+m4g <- mle2(y ~ dgeom(prob=1/(1+exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*snoob + b4*male))), data=list(y=n.kids), start=list(b0=0.2, b1=0.01, b2=0, b3=0, b4=0), trace=FALSE)
 
-# AICtab(m4p, m4z, m4g, m3p, m3z, m3g, m2p, m2z, m2g, m1p, m1z, m1g, m0p, m0z, m0g, weights=T)
+AICtab(m4p, m4z, m4g, m3p, m3z, m3g, m2p, m2z, m2g, m1p, m1z, m1g, m0p, m0z, m0g, weights=T)
 
-# # with density dependence
+# with density dependence
 
-# cat("fit fertility model m5p\n")
-# m5p <- mle2(y ~ dpois(lambda=exp((1-current.n/k)*(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*snoob + b4*male))), data=list(y=n.kids), start=list(b0=0.2, b1=0.01, b2=0, b3=0, b4=0, k=10000), trace=FALSE)
+cat("fit fertility model m5p\n")
+m5p <- mle2(y ~ dpois(lambda=exp((1-current.n/k)*(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*snoob + b4*male))), data=list(y=n.kids), start=list(b0=0.2, b1=0.01, b2=0, b3=0, b4=0, k=10000), trace=FALSE)
 
-# cat("fit fertility model m6p\n")
-# m6p <- mle2(y ~ dpois(lambda=exp(exp(-k*current.n)*(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*snoob + b4*male))), data=list(y=n.kids), start=list(b0=0.2, b1=0.01, b2=0, b3=0, b4=0, k=0.001), trace=FALSE)
+cat("fit fertility model m6p\n")
+m6p <- mle2(y ~ dpois(lambda=exp(exp(-k*current.n)*(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*snoob + b4*male))), data=list(y=n.kids), start=list(b0=0.2, b1=0.01, b2=0, b3=0, b4=0, k=0.001), trace=FALSE)
 
-# # with frequency-dependence
+# with frequency-dependence
 
-# cat("fit fertility model m7p\n")
-# m7p <- mle2(y ~ dpois(lambda=exp(b0 + b1*cen(age.yr) + b2*current.phibar)), data=list(y=n.kids), start=list(b0=0.2, b1=0, b2=0), trace=FALSE)
+cat("fit fertility model m7p\n")
+m7p <- mle2(y ~ dpois(lambda=exp(b0 + b1*cen(age.yr) + b2*current.phibar)), data=list(y=n.kids), start=list(b0=0.2, b1=0, b2=0), trace=FALSE)
 
-# cat("fit fertility model m7z\n")
-# m7z <- mle2(y ~ my.dzpois(lambda=exp(b0 + b1*cen(age.yr) + b2*current.phibar), a=alpha), data=list(y=n.kids), start=list(b0=0.2, b1=0, b2=0, alpha=0.1), trace=FALSE)
+cat("fit fertility model m7z\n")
+m7z <- mle2(y ~ my.dzpois(lambda=exp(b0 + b1*cen(age.yr) + b2*current.phibar), a=alpha), data=list(y=n.kids), start=list(b0=0.2, b1=0, b2=0, alpha=0.1), trace=FALSE)
 
-# cat("fit fertility model m7g\n")
-# m7g <- mle2(y ~ dgeom(prob=1/(1+exp(b0 + b1*cen(age.yr) + b2*current.phibar))), data=list(y=n.kids), start=list(b0=0.2, b1=0, b2=0), trace=FALSE)
+cat("fit fertility model m7g\n")
+m7g <- mle2(y ~ dgeom(prob=1/(1+exp(b0 + b1*cen(age.yr) + b2*current.phibar))), data=list(y=n.kids), start=list(b0=0.2, b1=0, b2=0), trace=FALSE)
 
-# cat("fit fertility model m8p\n")
-# m8p <- mle2(y ~ dpois(lambda=exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*current.phibar)), data=list(y=n.kids), start=list(b0=0.2, b1=0, b2=0, b3=0), trace=FALSE)
+cat("fit fertility model m8p\n")
+m8p <- mle2(y ~ dpois(lambda=exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*current.phibar)), data=list(y=n.kids), start=list(b0=0.2, b1=0, b2=0, b3=0), trace=FALSE)
 
-# cat("fit fertility model m8z\n")
-# m8z <- mle2(y ~ my.dzpois(lambda=exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*current.phibar), a=alpha), data=list(y=n.kids), start=list(b0=0.2, b1=0, b2=0, b3=0, alpha=0.1), trace=FALSE)
+cat("fit fertility model m8z\n")
+m8z <- mle2(y ~ my.dzpois(lambda=exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*current.phibar), a=alpha), data=list(y=n.kids), start=list(b0=0.2, b1=0, b2=0, b3=0, alpha=0.1), trace=FALSE)
 
-# cat("fit fertility model m8g\n")
-# m8g <- mle2(y ~ dgeom(prob=1/(1+exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*current.phibar))), data=list(y=n.kids), start=list(b0=0.2, b1=0, b2=0, b3=0), trace=FALSE)
+cat("fit fertility model m8g\n")
+m8g <- mle2(y ~ dgeom(prob=1/(1+exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*current.phibar))), data=list(y=n.kids), start=list(b0=0.2, b1=0, b2=0, b3=0), trace=FALSE)
 
-# cat("fit fertility model m9p\n")
-# m9p <- mle2(y ~ dpois(lambda=exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*snoob + b4*current.phibar)), data=list(y=n.kids), start=list(b0=0.2, b1=0.01, b2=0, b3=0, b4=0), trace=FALSE)
+cat("fit fertility model m9p\n")
+m9p <- mle2(y ~ dpois(lambda=exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*snoob + b4*current.phibar)), data=list(y=n.kids), start=list(b0=0.2, b1=0.01, b2=0, b3=0, b4=0), trace=FALSE)
 
-# cat("fit fertility model m9z\n")
-# m9z <- mle2(y ~ dpois(lambda=exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*snoob + b4*current.phibar)), data=list(y=n.kids), start=list(b0=0.2, b1=0.01, b2=0, b3=0, b4=0), trace=FALSE)
+cat("fit fertility model m9z\n")
+m9z <- mle2(y ~ dpois(lambda=exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*snoob + b4*current.phibar)), data=list(y=n.kids), start=list(b0=0.2, b1=0.01, b2=0, b3=0, b4=0), trace=FALSE)
 
-# cat("fit fertility model m9g\n")
-# m9g <- mle2(y ~ dpois(lambda=exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*snoob + b4*current.phibar)), data=list(y=n.kids), start=list(b0=0.2, b1=0.01, b2=0, b3=0, b4=0), trace=FALSE)
+cat("fit fertility model m9g\n")
+m9g <- mle2(y ~ dpois(lambda=exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*snoob + b4*current.phibar)), data=list(y=n.kids), start=list(b0=0.2, b1=0.01, b2=0, b3=0, b4=0), trace=FALSE)
 
-# cat("fit fertility model m10p\n")
-# m10p <- mle2(y ~ dpois(lambda=exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*snoob + b4*male + b5*current.phibar)), data=list(y=n.kids), start=list(b0=0.2, b1=0.01, b2=0, b3=0, b4=0, b5=0), trace=FALSE)
+cat("fit fertility model m10p\n")
+m10p <- mle2(y ~ dpois(lambda=exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*snoob + b4*male + b5*current.phibar)), data=list(y=n.kids), start=list(b0=0.2, b1=0.01, b2=0, b3=0, b4=0, b5=0), trace=FALSE)
 
-# cat("fit fertility model m10z\n")
-# m10z <- mle2(y ~ my.dzpois(lambda=exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*snoob + b4*male + b5*current.phibar), a=alpha), data=list(y=n.kids), start=list(b0=-1.15, b1=-0.02, b2=0, b3=0.68, b4=0.03, b5=0.22, alpha=0.1), trace=FALSE)
+cat("fit fertility model m10z\n")
+m10z <- mle2(y ~ my.dzpois(lambda=exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*snoob + b4*male + b5*current.phibar), a=alpha), data=list(y=n.kids), start=list(b0=-1.15, b1=-0.02, b2=0, b3=0.68, b4=0.03, b5=0.22, alpha=0.1), trace=FALSE)
 
-# cat("fit fertility model m10g\n")
-# m10g <- mle2(y ~ dgeom(prob=1/(1+exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*snoob + b4*male + b5*current.phibar))), data=list(y=n.kids), start=list(b0=0.2, b1=0.01, b2=0, b3=0, b4=0, b5=0), trace=FALSE)
+cat("fit fertility model m10g\n")
+m10g <- mle2(y ~ dgeom(prob=1/(1+exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*snoob + b4*male + b5*current.phibar))), data=list(y=n.kids), start=list(b0=0.2, b1=0.01, b2=0, b3=0, b4=0, b5=0), trace=FALSE)
 
-# AICtab(m10p, m10z, m10g, m9p, m9z, m9g, m8p, m8z, m8g, m7p, m7z, m7g, m4p, m4z, m4g, m3p, m3z, m3g, m2p, m2z, m2g, m1p, m1z, m1g, m0p, m0z, m0g, weights=T)
+AICtab(m10p, m10z, m10g, m9p, m9z, m9g, m8p, m8z, m8g, m7p, m7z, m7g, m4p, m4z, m4g, m3p, m3z, m3g, m2p, m2z, m2g, m1p, m1z, m1g, m0p, m0z, m0g, weights=T)
 
-# # interactions for the best models, m4 and m10
+# interactions for the best models, m4 and m10
 
-# cat("fit fertility model m4p.i\n")
-# m4p.i <- mle2(y ~ dpois(lambda=exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*snoob + b4*male + b5*male*snoob)), data=list(y=n.kids), start=list(b0=0.2, b1=0.01, b2=0, b3=0, b4=0, b5=0), trace=FALSE)
+cat("fit fertility model m4p.i\n")
+m4p.i <- mle2(y ~ dpois(lambda=exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*snoob + b4*male + b5*male*snoob)), data=list(y=n.kids), start=list(b0=0.2, b1=0.01, b2=0, b3=0, b4=0, b5=0), trace=FALSE)
 
-# cat("fit fertility model m4z.i\n")
-# m4z.i <- mle2(y ~ my.dzpois(lambda=exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*snoob + b4*male + b5*male*snoob), a=alpha), data=list(y=n.kids), start=list(b0=0.2, b1=0.01, b2=0, b3=0, b4=0, b5=0, alpha=0.1), trace=FALSE)
+cat("fit fertility model m4z.i\n")
+m4z.i <- mle2(y ~ my.dzpois(lambda=exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*snoob + b4*male + b5*male*snoob), a=alpha), data=list(y=n.kids), start=list(b0=0.2, b1=0.01, b2=0, b3=0, b4=0, b5=0, alpha=0.1), trace=FALSE)
 
-# cat("fit fertility model m4g.i\n")
-# m4g.i <- mle2(y ~ dgeom(prob=1/(1+exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*snoob + b4*male + b5*male*snoob))), data=list(y=n.kids), start=list(b0=0.2, b1=0.01, b2=0, b3=0, b4=0, b5=0), trace=FALSE)
+cat("fit fertility model m4g.i\n")
+m4g.i <- mle2(y ~ dgeom(prob=1/(1+exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*snoob + b4*male + b5*male*snoob))), data=list(y=n.kids), start=list(b0=0.2, b1=0.01, b2=0, b3=0, b4=0, b5=0), trace=FALSE)
 
-# cat("fit fertility model m10p.i\n")
-# m10p.i <- mle2(y ~ dpois(lambda=exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*snoob + b4*male + b5*current.phibar + b6*male*snoob)), data=list(y=n.kids), start=list(b0=0.2, b1=0.01, b2=0, b3=0, b4=0, b5=0, b6=0), trace=FALSE)
+cat("fit fertility model m10p.i\n")
+m10p.i <- mle2(y ~ dpois(lambda=exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*snoob + b4*male + b5*current.phibar + b6*male*snoob)), data=list(y=n.kids), start=list(b0=0.2, b1=0.01, b2=0, b3=0, b4=0, b5=0, b6=0), trace=FALSE)
 
-# cat("fit fertility model m10z.i\n")
-# m10z.i <- mle2(y ~ my.dzpois(lambda=exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*snoob + b4*male + b5*current.phibar + b6*male*snoob), a=alpha), data=list(y=n.kids), start=list(b0=-1.15, b1=-0.02, b2=0, b3=0.68, b4=0.03, b5=0.22, b6=0, alpha=0.1), trace=FALSE)
+cat("fit fertility model m10z.i\n")
+m10z.i <- mle2(y ~ my.dzpois(lambda=exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*snoob + b4*male + b5*current.phibar + b6*male*snoob), a=alpha), data=list(y=n.kids), start=list(b0=-1.15, b1=-0.02, b2=0, b3=0.68, b4=0.03, b5=0.22, b6=0, alpha=0.1), trace=FALSE)
 
-# cat("fit fertility model m10g.i\n")
-# m10g.i <- mle2(y ~ dgeom(prob=1/(1+exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*snoob + b4*male + b5*current.phibar + b6*male*snoob))), data=list(y=n.kids), start=list(b0=0.2, b1=0.01, b2=0, b3=0, b4=0, b5=0, b6=0), trace=FALSE)
+cat("fit fertility model m10g.i\n")
+m10g.i <- mle2(y ~ dgeom(prob=1/(1+exp(b0 + b1*cen(age.yr) + b2*(cen(age.yr))^2 + b3*snoob + b4*male + b5*current.phibar + b6*male*snoob))), data=list(y=n.kids), start=list(b0=0.2, b1=0.01, b2=0, b3=0, b4=0, b5=0, b6=0), trace=FALSE)
 
-# AICtab(m10p.i, m10z.i, m10g.i, m4p.i, m4z.i, m4g.i, m10p, m10z, m10g, m9p, m9z, m9g, m8p, m8z, m8g, m7p, m7z, m7g, m4p, m4z, m4g, m3p, m3z, m3g, m2p, m2z, m2g, m1p, m1z, m1g, m0p, m0z, m0g, weights=T)
+AICtab(m10p.i, m10z.i, m10g.i, m4p.i, m4z.i, m4g.i, m10p, m10z, m10g, m9p, m9z, m9g, m8p, m8z, m8g, m7p, m7z, m7g, m4p, m4z, m4g, m3p, m3z, m3g, m2p, m2z, m2g, m1p, m1z, m1g, m0p, m0z, m0g, weights=T)
 
+# this doesn't work for some reason
 # compare(m10p.i, m10z.i, m10g.i, m4p.i, m4z.i, m4g.i, m10p, m10z, m10g, m9p, m9z, m9g, m8p, m8z, m8g, m7p, m7z, m7g, m4p, m4z, m4g, m3p, m3z, m3g, m2p, m2z, m2g, m1p, m1z, m1g, m0p, m0z, m0g, nobs=length(n.kids))
 
 
@@ -591,62 +583,65 @@ current.census <- census.data[-drop]
 
 age.yr <- age/365
 
-# cat("fit change model m0\n")
+cat("fit change model m0\n")
 
-# m0 <- mle2(y ~ dbinom(1, prob=p), data=list(y=is.snoob), start=list(p=0.2), trace=FALSE)
+m0 <- mle2(y ~ dbinom(1, prob=p), data=list(y=is.snoob), start=list(p=0.2), trace=FALSE)
 
-# cat("fit change model m1\n")
+cat("fit change model m1\n")
 
 m1 <- mle2(y ~ dbinom(1, prob=L*(x^(B)/(x^(B) + (1-x)^(B))) + (1-L)*z), data=list(y = will.be.snoob, x =census.phibar, z=is.snoob), start=list(L=0.2, B=0.2), trace=FALSE) # warnings produced
 
-# cat("fit change model m2\n")
+cat("fit change model m2\n")
 
-# m2 <- mle2(y ~ dbinom(1, prob=L*(x + 4*(B-1)*x*(1-x)*(x-0.5))+ (1-L)*z), data=list(y = will.be.snoob, x =census.phibar, z=is.snoob), start=list(L=0.2, B=0), trace=FALSE)
+m2 <- mle2(y ~ dbinom(1, prob=L*(x + 4*(B-1)*x*(1-x)*(x-0.5))+ (1-L)*z), data=list(y = will.be.snoob, x =census.phibar, z=is.snoob), start=list(L=0.2, B=0), trace=FALSE)
 
-# cat("fit change model m3\n")
+cat("fit change model m3\n")
 
-# m3 <- mle2(y ~ dbinom(1, prob=L*(x + 4*(B-1)*x*(1-x)*(x-k))+ (1-L)*z), data=list(y = will.be.snoob, x =census.phibar, z=is.snoob), start=list(L=0.2, B=0, k=0.5), trace=FALSE)
+m3 <- mle2(y ~ dbinom(1, prob=L*(x + 4*(B-1)*x*(1-x)*(x-k))+ (1-L)*z), data=list(y = will.be.snoob, x =census.phibar, z=is.snoob), start=list(L=0.2, B=0, k=0.5), trace=FALSE)
 
-# cat("fit change model m4\n")
+cat("fit change model m4\n")
 
-# m4 <-  mle2(y ~ dbinom(1, prob=L*(exp(b0 + b1*x)/(1+exp(b0 + b1*x))) + (1-L)*z ), data=list(y = will.be.snoob, x = census.phibar, z = is.snoob), start=list(L=0.2, b0=0.3, b1=0), trace=FALSE)
+m4 <-  mle2(y ~ dbinom(1, prob=L*(exp(b0 + b1*x)/(1+exp(b0 + b1*x))) + (1-L)*z ), data=list(y = will.be.snoob, x = census.phibar, z = is.snoob), start=list(L=0.2, b0=0.3, b1=0), trace=FALSE)
 
-# cat("fit change model m5\n")
+cat("fit change model m5\n")
 
+# why is current.popsize the wrong size?? bug
 # m5 <- mle2(y ~ dbinom(1, prob=L*(1/(1+exp(b0 + b1*n))) + (1-L)*z), data=list(y = will.be.snoob, n = current.popsize, z = is.snoob), start=list(L=0.2, b0=0.3, b1=0), trace=FALSE)
 
 # cat("fit change model m6\n")
 
 # m6 <- mle2(y ~ dbinom(1, prob=L*(1/(1+exp(b0 + b1*su(n) + b2*su(n)^2))) + (1-L)*z), data=list(y = will.be.snoob, n = current.popsize, z = is.snoob), start=list(L=0.2, b0=0.3, b1=0, b2=0), trace=FALSE)
 
-# cat("fit change model m7\n")
+cat("fit change model m7\n")
 
-# m7 <- mle2(y ~ dbinom(1, prob=L*(1/(1+exp(b0 + b1*t))) + (1-L)*z ), data=list(y = will.be.snoob, t = current.census, z = is.snoob), start=list(L=0.2, b0=0.3, b1=0), trace=FALSE)
+m7 <- mle2(y ~ dbinom(1, prob=L*(1/(1+exp(b0 + b1*t))) + (1-L)*z ), data=list(y = will.be.snoob, t = current.census, z = is.snoob), start=list(L=0.2, b0=0.3, b1=0), trace=FALSE)
 
-# cat("fit change model m8\n")
+cat("fit change model m8\n")
 
-# m8 <- mle2(y ~ dbinom(1, prob=L*(1/(1+exp(b0 + b1*t + b2*t^2))) + (1-L)*z ), data=list(y = will.be.snoob, t = current.census, z = is.snoob), start=list(L=0.2, b0=0.3, b1=0, b2=0), trace=FALSE)
+m8 <- mle2(y ~ dbinom(1, prob=L*(1/(1+exp(b0 + b1*t + b2*t^2))) + (1-L)*z ), data=list(y = will.be.snoob, t = current.census, z = is.snoob), start=list(L=0.2, b0=0.3, b1=0, b2=0), trace=FALSE)
 
-# cat("fit change model m9\n")
+cat("fit change model m9\n")
 
-# m9 <- mle2(y ~ dbinom(1, prob= L*(b0 + b1*sin(b2*t)) + (1-L)*z), data=list(y = will.be.snoob, t = current.census, z = is.snoob), start=list(L=0.2, b0=0.3, b1=0.1, b2=1), trace=FALSE)
+m9 <- mle2(y ~ dbinom(1, prob= L*(b0 + b1*sin(b2*t)) + (1-L)*z), data=list(y = will.be.snoob, t = current.census, z = is.snoob), start=list(L=0.2, b0=0.3, b1=0.1, b2=1), trace=FALSE)
 
-# cat("fit change model m10\n")
+cat("fit change model m10\n")
 
+# current.popsize bug!
 # m10 <- mle2(y ~ dbinom(1, prob= L*(b0 + b1*sin(b2*n)) + (1-L)*z), data=list(y = will.be.snoob, n = current.popsize, z = is.snoob), start=list(L=0.2, b0=0.3, b1=0.1, b2=1), trace=FALSE)
 
-# cat("fit change model m11\n")
+cat("fit change model m11\n")
 
 # m11 <- mle2(y ~ dbinom(1, prob=L*(1/(1+exp(b0 + b1*n + b2*t))) + (1-L)*z), data=list(y = will.be.snoob, n = current.popsize, t = current.census, z = is.snoob), start=list(L=0.2, b0=0.3, b1=0, b2=0), trace=FALSE)
 
-# cat("fit change model m12\n")
+cat("fit change model m12\n")
 
-# m12 <-  mle2(y ~ dbinom(1, prob=L*(1/(1+exp(b0 + b1*x + b2*a + b3*m))) + (1-L)*z ), data=list(y = will.be.snoob, x = census.phibar, z = is.snoob, a = cen(age.yr), m = male), start=list(L=0.2, b0=0.3, b1=0, b2=0, b3=0), trace=FALSE)
+m12 <-  mle2(y ~ dbinom(1, prob=L*(1/(1+exp(b0 + b1*x + b2*a + b3*m))) + (1-L)*z ), data=list(y = will.be.snoob, x = census.phibar, z = is.snoob, a = cen(age.yr), m = male), start=list(L=0.2, b0=0.3, b1=0, b2=0, b3=0), trace=FALSE)
 
-# cat("fit change model m13\n")
+cat("fit change model m13\n")
 
-# m13 <-  mle2(y ~ dbinom(1, prob=L*(1/(1+exp(b0 + b1*x + b2*a + b3*m + b4*t))) + (1-L)*z ), data=list(y = will.be.snoob, x = census.phibar, a = cen(age.yr), m = male, z = is.snoob, t = current.census), start=list(L=0.2, b0=0.3, b1=0, b2=0, b3=0, b4=0), trace=FALSE)
+m13 <-  mle2(y ~ dbinom(1, prob=L*(1/(1+exp(b0 + b1*x + b2*a + b3*m + b4*t))) + (1-L)*z ), data=list(y = will.be.snoob, x = census.phibar, a = cen(age.yr), m = male, z = is.snoob, t = current.census), start=list(L=0.2, b0=0.3, b1=0, b2=0, b3=0, b4=0), trace=FALSE)
  
+# until the current.popsize porblem is fixed this wont work
 # compare(m0,m1,m2,m3,m4,m5,m6,m7,m8, m9, m10, m11, m12,m13, nobs=length(will.be.snoob))
 
 

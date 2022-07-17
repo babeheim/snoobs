@@ -1,8 +1,4 @@
 
-rm(list = ls())
-
-source("project_support.R")
-
 my.data <- read.csv("raw_data.csv", stringsAsFactors = FALSE)
 
 prepped.data <- BDICE.sim.decomp.prepper(my.data, phenotype = "snoob")
