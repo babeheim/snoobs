@@ -104,8 +104,8 @@ cat("fit mortality model m1z\n")
 m1z <- mle2(y ~ my.dzbinom(1, prob=1/(1+exp(p1 + p2*cen(d$age))), a=alpha),
   data=list(y = d$will_die), start=list(p1=3.14, p2=0, alpha=0.1), trace=FALSE) # warnings
 
-cat("fit mortality model m2z\n")
-m2z <- mle2(y ~ my.dzbinom(1, prob=1/(1+exp(p1 + p2*cen(d$age) + p3*cen(d$age)^2)), a=alpha) , data=list(y = d$will_die), start=list(p1=3.66, p2=0, p3=0, alpha=0.1), trace=FALSE)
+# cat("fit mortality model m2z\n")
+# m2z <- mle2(y ~ my.dzbinom(1, prob=1/(1+exp(p1 + p2*cen(d$age) + p3*cen(d$age)^2)), a=alpha) , data=list(y = d$will_die), start=list(p1=3.66, p2=0, p3=0, alpha=0.1), trace=FALSE)
 
 cat("fit mortality model m3z\n")
 m3z <- mle2(y ~ my.dzbinom(1, prob=1/(1+exp(p1 + p2*cen(d$age) + p3*cen(d$age)^2 + p4*d$male)), a=alpha),
@@ -119,7 +119,7 @@ cat("fit mortality model m5z\n")
 m5z <- mle2(y ~ my.dzbinom(1, prob=1/(1+exp(p1 + p2*cen(d$age) + p3*cen(d$age)^2 + p4*d$male + p5*d$snoob + p6*d$phi_bar)), a=1/(1+exp(alpha))),
   data=list(y = d$will_die), start=list(p1=4.8, p2=0, p3=0, p4=0, p5=0, p6=0, alpha=0.1), trace=FALSE) # warnings
 
-AICtab(m0, m1, m2, m3, m4, m5, m0z, m1z, m2z, m3z, m4z, m5z, m6, weights = TRUE)
+AICtab(m0, m1, m2, m3, m4, m5, m0z, m1z, m3z, m4z, m5z, m6, weights = TRUE)
 
 cat("create mortality.png\n")
 

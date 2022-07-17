@@ -5,7 +5,7 @@ library(bbmle)
 library(rethinking)
 library(tictoc)
 
-n_sim_years <- 200 # publication value 300 years
+n_sim_years <- 300 # publication value 300 years
 n_ind_init <- 1000 # publication value 1000 people
 census_interval_years <- 5 # publication value 5 years
 frq_snoob_init <- 0.2
