@@ -16,16 +16,19 @@
 [x] update all the census and prepped data variable names
 [x] re-write decomposer so it doesnt need the dead persons phenotype for the census where they are already recorded as dead
 [x] re-write this to work from 1:(n_censuses - 1) as in the worked table 2 example
-[-] think up better id than `analysis_data.csv`
-[-] refactor `prep_census_data`
-[-] refactor `decompose_prepped_census`
-[-] remove 'grouping' aspect of `decompose_prepped_census`
-[-] edge case: people born but parents were not present in the population last census are immigrants, not borns
+[x] refactor `prep_census_data` & bring into the main script
+[x] refactor `decompose_prepped_census` & bring into the main script
+[x] remove 'grouping' aspect of `decompose_prepped_census`
+[x] rewrite the census-recoding to ignore people born and died intercensus
+[x] relabel the censuses to start at 1 not 0
+[x] confrim the `n.kids` in the prepped data is the kids you WILL have next intercensus
+[x] rewrite analysis script to use the new nomenclature and variable definitions
+
+[-] update the table 2 work to incorporate my new insights into the right way to store info, thinking of pairs of entries
+
+[-] think up better name than `analysis_data.csv`
 [-] refactor fertility and mortality figures
-[-] rewrite the census-recoding to ignore people born and died intercensus
-[-] relabel the censuses to start at 1 not 0
 [-] fix the fit on the individual change figure
-[-] confrim the `n.kids` in the prepped data is the kids you WILL have next intercensus
 [-] flag all warnings
 [-] output supplementary tables as tex files
 [-] why does my analysis figure code assume that phi will be near 0.5 at some point?
