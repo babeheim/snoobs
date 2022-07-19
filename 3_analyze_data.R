@@ -18,17 +18,17 @@ cens <- data.frame(
   census = census_list
 )
 
-# state 3 in the prepped data means 'died between the last census and the current one'
-d$died <- as.numeric(d$state == 3)
-
 # outcome: will you be a snoob next census?
 
-d$snoob <- d$phi
+d <- rename(d, snoob = phi, n_kids = n.kids)
 
-cens$phi_bar <- as.numeric(tapply(d$phi, d$census, mean))
+# state 3 in the prepped data means 'died between the last census and the current one'
+d$died <- as.numeric(d$state == 3)
+alive <- which(d$died != 1)
+
+cens$phi_bar <- as.numeric(tapply(d$snoob[alive], d$census[alive], mean))
 d$phi_bar <- cens$phi_bar[match(d$census, cens$census)]
 
-alive <- which(d$died != 1)
 cens$pop_size <- as.numeric(table(d$census[alive]))
 d$pop_size <- cens$pop_size[match(d$census, cens$census)]
 
@@ -36,10 +36,10 @@ d$will_die <- NA
 d$will_be_snoob <- NA
 
 for (i in 1:(n_censuses - 1)) {
-  this_census <- which(d$census == census_list[i])
-  died_next_census <- which(d$died == 1 & d$census == census_list[i + 1])
+  this_census <- which(d$census == cens$census[i])
+  died_next_census <- which(d$died == 1 & d$census == cens$census[i + 1])
   d$will_die[this_census] <- as.numeric(d$id[this_census] %in% d$id[died_next_census])
-  snoob_next_census <- which(d$snoob == 1 & d$census == census_list[i + 1])
+  snoob_next_census <- which(d$snoob == 1 & d$census == cens$census[i + 1])
   d$will_be_snoob[this_census] <- as.numeric(d$id[this_census] %in% d$id[snoob_next_census])
 }
 
@@ -59,8 +59,6 @@ stopifnot(!any(is.na(d$male)))
 
 d$age_c <- floor(d$age)
 d$age_c[d$age_c > 100] <- 100
-
-d <- rename(d, n_kids = n.kids)
 
 
 
@@ -145,12 +143,14 @@ p3 <- -0.001
 p4 <- -0.088
 p5 <- 0.559
 
+age_cen <- 33.81
+
 plot(1000*ns.pr.die ~ names(ns.pr.die), las=1)
 points(1000*s.pr.die ~ names(ns.pr.die), pch=20)
-curve(1000*dbinom(1, 1, prob=1/(1+exp(p1 + p2*(x-33.81) + p3*(x-33.81)^2 + p4*0 + p5*0))), type="l", lty=2, from=0, to=100, add=T, col="maroon1")
-curve(1000*dbinom(1, 1, prob=1/(1+exp(p1 + p2*(x-33.81) + p3*(x-33.81)^2 + p4*0 + p5*1))), type="l", from=0, to=100, add=T, col="maroon1")
-curve(1000*dbinom(1, 1, prob=1/(1+exp(p1 + p2*(x-33.81) + p3*(x-33.81)^2 + p4*1 + p5*0))), type="l", lty=2, from=0, to=100, add=T, col="dodgerblue")
-curve(1000*dbinom(1, 1, prob=1/(1+exp(p1 + p2*(x-33.81) + p3*(x-33.81)^2 + p4*1 + p5*1))), type="l", from=0, to=100, add=T, col="dodgerblue")
+curve(1000*dbinom(1, 1, prob=1/(1+exp(p1 + p2*(x-age_cen) + p3*(x-age_cen)^2 + p4*0 + p5*0))), type="l", lty=2, from=0, to=100, add=T, col="maroon1")
+curve(1000*dbinom(1, 1, prob=1/(1+exp(p1 + p2*(x-age_cen) + p3*(x-age_cen)^2 + p4*0 + p5*1))), type="l", from=0, to=100, add=T, col="maroon1")
+curve(1000*dbinom(1, 1, prob=1/(1+exp(p1 + p2*(x-age_cen) + p3*(x-age_cen)^2 + p4*1 + p5*0))), type="l", lty=2, from=0, to=100, add=T, col="dodgerblue")
+curve(1000*dbinom(1, 1, prob=1/(1+exp(p1 + p2*(x-age_cen) + p3*(x-age_cen)^2 + p4*1 + p5*1))), type="l", from=0, to=100, add=T, col="dodgerblue")
 
 s.pr.die.nums <- tapply(d$will_die[d$snoob==1], d$age_c[d$snoob==1], mean)
 s.pr.die <- rep(0, length(0:100))
@@ -173,20 +173,20 @@ plot(1000*ns.pr.die ~ names(ns.pr.die), log="y", las=1, col="gray", ylim=c(.1, 1
 points(1000*s.pr.die ~ names(ns.pr.die), pch=1)
 
 x <- c(0:100)
-points(1000*dbinom(1, 1, prob=1/(1+exp(p1 + p2*(x-33.81) + p3*(x-33.81)^2 + p4*0 + p5*0))), type="l", col="maroon1")
-points(1000*dbinom(1, 1, prob=1/(1+exp(p1 + p2*(x-33.81) + p3*(x-33.81)^2 + p4*0 + p5*1))), type="l", col="maroon1")
-points(1000*dbinom(1, 1, prob=1/(1+exp(p1 + p2*(x-33.81) + p3*(x-33.81)^2 + p4*1 + p5*0))), type="l", col="dodgerblue")
-points(1000*dbinom(1, 1, prob=1/(1+exp(p1 + p2*(x-33.81) + p3*(x-33.81)^2 + p4*1 + p5*1))), type="l", col="dodgerblue")
+points(1000*dbinom(1, 1, prob=1/(1+exp(p1 + p2*(x-age_cen) + p3*(x-age_cen)^2 + p4*0 + p5*0))), type="l", col="maroon1")
+points(1000*dbinom(1, 1, prob=1/(1+exp(p1 + p2*(x-age_cen) + p3*(x-age_cen)^2 + p4*0 + p5*1))), type="l", col="maroon1")
+points(1000*dbinom(1, 1, prob=1/(1+exp(p1 + p2*(x-age_cen) + p3*(x-age_cen)^2 + p4*1 + p5*0))), type="l", col="dodgerblue")
+points(1000*dbinom(1, 1, prob=1/(1+exp(p1 + p2*(x-age_cen) + p3*(x-age_cen)^2 + p4*1 + p5*1))), type="l", col="dodgerblue")
 
 human.ages <- 0:100
 plot(cumprod(1-ns.pr.die))
 points(cumprod(1-s.pr.die), pch=20)
-fitted.s <- dbinom(1, 1, prob=1/(1+exp(p1 + p2*(human.ages-33.81) + p3*(human.ages-33.81)^2 + p4*0 + p5*1)))
-fitted.ns <- dbinom(1, 1, prob=1/(1+exp(p1 + p2*(human.ages-33.81) + p3*(human.ages-33.81)^2 + p4*0 + p5*0)))
+fitted.s <- dbinom(1, 1, prob=1/(1+exp(p1 + p2*(human.ages-age_cen) + p3*(human.ages-age_cen)^2 + p4*0 + p5*1)))
+fitted.ns <- dbinom(1, 1, prob=1/(1+exp(p1 + p2*(human.ages-age_cen) + p3*(human.ages-age_cen)^2 + p4*0 + p5*0)))
 points(cumprod(1-fitted.s), type="l", col="maroon1")
 points(cumprod(1-fitted.ns), type="l", col="maroon1")
-fitted.s <- dbinom(1, 1, prob=1/(1+exp(p1 + p2*(human.ages-33.81) + p3*(human.ages-33.81)^2 + p4*1 + p5*1)))
-fitted.ns <- dbinom(1, 1, prob=1/(1+exp(p1 + p2*(human.ages-33.81) + p3*(human.ages-33.81)^2 + p4*1 + p5*0)))
+fitted.s <- dbinom(1, 1, prob=1/(1+exp(p1 + p2*(human.ages-age_cen) + p3*(human.ages-age_cen)^2 + p4*1 + p5*1)))
+fitted.ns <- dbinom(1, 1, prob=1/(1+exp(p1 + p2*(human.ages-age_cen) + p3*(human.ages-age_cen)^2 + p4*1 + p5*0)))
 points(cumprod(1-fitted.s), type="l", col="dodgerblue")
 points(cumprod(1-fitted.ns), type="l", col="dodgerblue")
 
@@ -356,6 +356,8 @@ if (any(abs(cens$phi_bar - 0.5) < 0.1)) {
 
   par(mfrow=c(2,2))
 
+  age_cen <- 32.67694
+
   k <- 1
   plot.phibar <- 0.5
   will.have.k <- as.numeric(dk$n_kids==k)
@@ -367,10 +369,10 @@ if (any(abs(cens$phi_bar - 0.5) < 0.1)) {
   plot(ns.pr.will.have.k ~ age.list, ylim=c(min(c(ns.pr.will.have.k, s.pr.will.have.k)), max(ns.pr.will.have.k, s.pr.will.have.k)), ylab="", xlab="Age", las=1, main=paste("Prob. of having", k, "kid", sep=" "), col="gray")
   points(s.pr.will.have.k ~ age.list, col="black", pch=1)
 
-  curve(my.dzpois(k, lambda=exp(b0 + b1*(x-32.67694) + b2*(x-32.67694)^2 + b3*1 + b4*1 + b5*plot.phibar), a=alpha), from=11, to=60, col="dodgerblue", ylim=c(0, 0.2), add=T)
-  curve(my.dzpois(k, lambda=exp(b0 + b1*(x-32.67694) + b2*(x-32.67694)^2 + b3*0 + b4*1 + b5*plot.phibar), a=alpha), from=11, to=60, col="dodgerblue", lty=1, add=T)
-  curve(my.dzpois(k, lambda=exp(b0 + b1*(x-32.67694) + b2*(x-32.67694)^2 + b3*1 + b4*0 + b5*plot.phibar), a=alpha), from=11, to=60, col="maroon1", add=T)
-  curve(my.dzpois(k, lambda=exp(b0 + b1*(x-32.67694) + b2*(x-32.67694)^2 + b3*0 + b4*0 + b5*plot.phibar), a=alpha), from=11, to=60, col="maroon1", lty=1, add=T)
+  curve(my.dzpois(k, lambda=exp(b0 + b1*(x-age_cen) + b2*(x-age_cen)^2 + b3*1 + b4*1 + b5*plot.phibar), a=alpha), from=11, to=60, col="dodgerblue", ylim=c(0, 0.2), add=T)
+  curve(my.dzpois(k, lambda=exp(b0 + b1*(x-age_cen) + b2*(x-age_cen)^2 + b3*0 + b4*1 + b5*plot.phibar), a=alpha), from=11, to=60, col="dodgerblue", lty=1, add=T)
+  curve(my.dzpois(k, lambda=exp(b0 + b1*(x-age_cen) + b2*(x-age_cen)^2 + b3*1 + b4*0 + b5*plot.phibar), a=alpha), from=11, to=60, col="maroon1", add=T)
+  curve(my.dzpois(k, lambda=exp(b0 + b1*(x-age_cen) + b2*(x-age_cen)^2 + b3*0 + b4*0 + b5*plot.phibar), a=alpha), from=11, to=60, col="maroon1", lty=1, add=T)
 
   k <- 2
   plot.phibar <- 0.5
@@ -382,10 +384,10 @@ if (any(abs(cens$phi_bar - 0.5) < 0.1)) {
   plot(ns.pr.will.have.k ~ age.list, ylim=c(min(c(ns.pr.will.have.k, s.pr.will.have.k)), max(ns.pr.will.have.k, s.pr.will.have.k)), ylab="", xlab="Age", las=1, main=paste("Prob. of having", k, "kids", sep=" "), col="gray")
   points(s.pr.will.have.k ~ age.list, col="black", pch=1)
 
-  curve(my.dzpois(k, lambda=exp(b0 + b1*(x-32.67694) + b2*(x-32.67694)^2 + b3*1 + b4*1 + b5*plot.phibar), a=alpha), from=11, to=60, col="dodgerblue", ylim=c(0, 0.2), add=T)
-  curve(my.dzpois(k, lambda=exp(b0 + b1*(x-32.67694) + b2*(x-32.67694)^2 + b3*0 + b4*1 + b5*plot.phibar), a=alpha), from=11, to=60, col="dodgerblue", lty=1, add=T)
-  curve(my.dzpois(k, lambda=exp(b0 + b1*(x-32.67694) + b2*(x-32.67694)^2 + b3*1 + b4*0 + b5*plot.phibar), a=alpha), from=11, to=60, col="maroon1", add=T)
-  curve(my.dzpois(k, lambda=exp(b0 + b1*(x-32.67694) + b2*(x-32.67694)^2 + b3*0 + b4*0 + b5*plot.phibar), a=alpha), from=11, to=60, col="maroon1", lty=1, add=T)
+  curve(my.dzpois(k, lambda=exp(b0 + b1*(x-age_cen) + b2*(x-age_cen)^2 + b3*1 + b4*1 + b5*plot.phibar), a=alpha), from=11, to=60, col="dodgerblue", ylim=c(0, 0.2), add=T)
+  curve(my.dzpois(k, lambda=exp(b0 + b1*(x-age_cen) + b2*(x-age_cen)^2 + b3*0 + b4*1 + b5*plot.phibar), a=alpha), from=11, to=60, col="dodgerblue", lty=1, add=T)
+  curve(my.dzpois(k, lambda=exp(b0 + b1*(x-age_cen) + b2*(x-age_cen)^2 + b3*1 + b4*0 + b5*plot.phibar), a=alpha), from=11, to=60, col="maroon1", add=T)
+  curve(my.dzpois(k, lambda=exp(b0 + b1*(x-age_cen) + b2*(x-age_cen)^2 + b3*0 + b4*0 + b5*plot.phibar), a=alpha), from=11, to=60, col="maroon1", lty=1, add=T)
 
 
   k <- 3
@@ -398,10 +400,10 @@ if (any(abs(cens$phi_bar - 0.5) < 0.1)) {
   plot(ns.pr.will.have.k ~ age.list, ylim=c(min(c(ns.pr.will.have.k, s.pr.will.have.k)), max(ns.pr.will.have.k, s.pr.will.have.k)), ylab="", xlab="Age", las=1, main=paste("Prob. of having", k, "kids", sep=" "), col="gray")
   points(s.pr.will.have.k ~ age.list, col="black", pch=1)
 
-  curve(my.dzpois(k, lambda=exp(b0 + b1*(x-32.67694) + b2*(x-32.67694)^2 + b3*1 + b4*1 + b5*plot.phibar), a=alpha), from=11, to=60, col="dodgerblue", ylim=c(0, 0.2), add=T)
-  curve(my.dzpois(k, lambda=exp(b0 + b1*(x-32.67694) + b2*(x-32.67694)^2 + b3*0 + b4*1 + b5*plot.phibar), a=alpha), from=11, to=60, col="dodgerblue", lty=1, add=T)
-  curve(my.dzpois(k, lambda=exp(b0 + b1*(x-32.67694) + b2*(x-32.67694)^2 + b3*1 + b4*0 + b5*plot.phibar), a=alpha), from=11, to=60, col="maroon1", add=T)
-  curve(my.dzpois(k, lambda=exp(b0 + b1*(x-32.67694) + b2*(x-32.67694)^2 + b3*0 + b4*0 + b5*plot.phibar), a=alpha), from=11, to=60, col="maroon1", lty=1, add=T)
+  curve(my.dzpois(k, lambda=exp(b0 + b1*(x-age_cen) + b2*(x-age_cen)^2 + b3*1 + b4*1 + b5*plot.phibar), a=alpha), from=11, to=60, col="dodgerblue", ylim=c(0, 0.2), add=T)
+  curve(my.dzpois(k, lambda=exp(b0 + b1*(x-age_cen) + b2*(x-age_cen)^2 + b3*0 + b4*1 + b5*plot.phibar), a=alpha), from=11, to=60, col="dodgerblue", lty=1, add=T)
+  curve(my.dzpois(k, lambda=exp(b0 + b1*(x-age_cen) + b2*(x-age_cen)^2 + b3*1 + b4*0 + b5*plot.phibar), a=alpha), from=11, to=60, col="maroon1", add=T)
+  curve(my.dzpois(k, lambda=exp(b0 + b1*(x-age_cen) + b2*(x-age_cen)^2 + b3*0 + b4*0 + b5*plot.phibar), a=alpha), from=11, to=60, col="maroon1", lty=1, add=T)
 
 
   k <- 4
@@ -414,10 +416,10 @@ if (any(abs(cens$phi_bar - 0.5) < 0.1)) {
   plot(ns.pr.will.have.k ~ age.list, ylim=c(min(c(ns.pr.will.have.k, s.pr.will.have.k)), max(ns.pr.will.have.k, s.pr.will.have.k)), ylab="", xlab="Age", las=1, main=paste("Prob. of having", k, "kids", sep=" "), col="gray")
   points(s.pr.will.have.k ~ age.list, col="black", pch=1)
 
-  curve(my.dzpois(k, lambda=exp(b0 + b1*(x-32.67694) + b2*(x-32.67694)^2 + b3*1 + b4*1 + b5*plot.phibar), a=alpha), from=11, to=60, col="dodgerblue", ylim=c(0, 0.2), add=T)
-  curve(my.dzpois(k, lambda=exp(b0 + b1*(x-32.67694) + b2*(x-32.67694)^2 + b3*0 + b4*1 + b5*plot.phibar), a=alpha), from=11, to=60, col="dodgerblue", lty=1, add=T)
-  curve(my.dzpois(k, lambda=exp(b0 + b1*(x-32.67694) + b2*(x-32.67694)^2 + b3*1 + b4*0 + b5*plot.phibar), a=alpha), from=11, to=60, col="maroon1", add=T)
-  curve(my.dzpois(k, lambda=exp(b0 + b1*(x-32.67694) + b2*(x-32.67694)^2 + b3*0 + b4*0 + b5*plot.phibar), a=alpha), from=11, to=60, col="maroon1", lty=1, add=T)
+  curve(my.dzpois(k, lambda=exp(b0 + b1*(x-age_cen) + b2*(x-age_cen)^2 + b3*1 + b4*1 + b5*plot.phibar), a=alpha), from=11, to=60, col="dodgerblue", ylim=c(0, 0.2), add=T)
+  curve(my.dzpois(k, lambda=exp(b0 + b1*(x-age_cen) + b2*(x-age_cen)^2 + b3*0 + b4*1 + b5*plot.phibar), a=alpha), from=11, to=60, col="dodgerblue", lty=1, add=T)
+  curve(my.dzpois(k, lambda=exp(b0 + b1*(x-age_cen) + b2*(x-age_cen)^2 + b3*1 + b4*0 + b5*plot.phibar), a=alpha), from=11, to=60, col="maroon1", add=T)
+  curve(my.dzpois(k, lambda=exp(b0 + b1*(x-age_cen) + b2*(x-age_cen)^2 + b3*0 + b4*0 + b5*plot.phibar), a=alpha), from=11, to=60, col="maroon1", lty=1, add=T)
 
   dev.off()
 
@@ -499,7 +501,7 @@ cfact <- data.frame(
   pr_to_snoob_ub = NA
 )
 
-post <- sample.qa.posterior(m1)
+post <- rethinking::extract.samples(m1)
 
 for (i in seq_len(nrow(cfact))) {
   prob <- post$L * (cfact$frq_snoob[i])^(post$B)/(cfact$frq_snoob[i]^post$B + (1 - cfact$frq_snoob[i])^post$B)
@@ -514,16 +516,22 @@ for (i in seq_len(nrow(cfact))) {
 
 par(mfrow = c(1, 2))
 
-plot(cens$snoob_to_snoob ~ cens$phi_bar, ylim=c(0.85, 1), ylab="Prob. Remaining Snoob", xlab="Mean Pop. Frq", col="blue", las=1, frame.plot=F, xlim=c(.15, 1))
+plot(cens$snoob_to_snoob ~ cens$phi_bar,
+  xlim = c(0.15, 1), ylim = c(0.85, 1),
+  ylab = "Prob. Remaining Snoob", xlab="Mean Pop. Frq",
+  col = "blue", las = 1, frame.plot = FALSE)
 
-points(cfact$frq_snoob, cfact$pr_stay_snoob_mu, lty=2, type="l")
-points(cfact$frq_snoob, cfact$pr_stay_snoob_lb, lty=1, type="l")
-points(cfact$frq_snoob, cfact$pr_stay_snoob_ub, lty=1, type="l")
+points(cfact$frq_snoob, cfact$pr_stay_snoob_mu, lty = 2, type = "l")
+points(cfact$frq_snoob, cfact$pr_stay_snoob_lb, lty = 1, type = "l")
+points(cfact$frq_snoob, cfact$pr_stay_snoob_ub, lty = 1, type = "l")
 
-plot(cens$non_to_snoob ~ cens$phi_bar, ylim=c(0,.15), ylab="Prob. Becoming Snoob", xlab="Mean Pop. Frq", col="blue", las=1, frame.plot=F, xlim=c(.15, 1))
+plot(cens$non_to_snoob ~ cens$phi_bar,
+  xlim = c(0.15, 1), ylim = c(0, 0.15),
+  ylab = "Prob. Becoming Snoob", xlab = "Mean Pop. Frq",
+  col = "blue", las = 1, frame.plot = FALSE)
 
-points(cfact$frq_snoob, cfact$pr_to_snoob_mu, lty=2, type="l")
-points(cfact$frq_snoob, cfact$pr_to_snoob_lb, lty=1, type="l")
-points(cfact$frq_snoob, cfact$pr_to_snoob_ub, lty=1, type="l")
+points(cfact$frq_snoob, cfact$pr_to_snoob_mu, lty = 2, type = "l")
+points(cfact$frq_snoob, cfact$pr_to_snoob_lb, lty = 1, type = "l")
+points(cfact$frq_snoob, cfact$pr_to_snoob_ub, lty = 1, type = "l")
 
 dev.off()

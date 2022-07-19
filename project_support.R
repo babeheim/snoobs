@@ -16,5 +16,4 @@ machine_name <- "thinkpad x360"
 
 source("R/misc_functions.R")
 source("R/simulation_functions.R")
-source("R/decomposition_functions.R")
 source("R/analysis_functions.R")
