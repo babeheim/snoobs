@@ -9,8 +9,8 @@ cat("define simulation parameters\n")
 n_sim_days <- 365 * n_sim_years
 census_interval <- 365 * census_interval_years
 
-show_running_graphs <- TRUE
-log_events <- TRUE
+show_running_graphs <- FALSE
+log_events <- FALSE
 
 # Vital Population Rates
 asf <- c(40.47, 102.50, 115.92, 96.10, 46.36, 9.12, 0.58)

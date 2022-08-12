@@ -23,12 +23,11 @@
 [x] relabel the censuses to start at 1 not 0
 [x] confrim the `n.kids` in the prepped data is the kids you WILL have next intercensus
 [x] rewrite analysis script to use the new nomenclature and variable definitions
-
-[-] update the table 2 work to incorporate my new insights into the right way to store info, thinking of pairs of entries
+[x] update the table 2 work to incorporate my new insights into the right way to store info, thinking of pairs of entries
 
 [-] think up better name than `analysis_data.csv`
 [-] refactor fertility and mortality figures
-[-] fix the fit on the individual change figure
+[-] fix the fit on the individual change figure?
 [-] flag all warnings
 [-] output supplementary tables as tex files
 [-] why does my analysis figure code assume that phi will be near 0.5 at some point?

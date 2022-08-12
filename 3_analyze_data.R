@@ -9,7 +9,6 @@ d <- read.csv("analysis_data.csv")
 
 cat("prep predictors\n")
 
-# for some reason we call the initial census 'census 0' which is weird
 census_list <- unique(d$census)
 n_censuses <- length(census_list)
 stopifnot(census_list == seq_len(n_censuses))
