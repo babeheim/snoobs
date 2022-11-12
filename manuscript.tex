@@ -1,37 +1,40 @@
 \documentclass[11pt]{article}
-\usepackage[pdftex]{graphicx}
-\usepackage{times}
-\fontsize{9}{11}
-% \usepackage{cite}
-\usepackage{lineno}
-\usepackage{amsmath,amssymb,amsthm}
-\usepackage{rotating}
-\usepackage[usenames]{color}
-\newcommand{\captionfonts}{\small}
-\usepackage{authblk}
-\usepackage[left=1.25in,top=1.25in,right=1.25in,bottom=1.25in]{geometry}
-\linespread{1}
-\usepackage{natbib}
-%\usepackage{te}
+\usepackage{natbib} % our bibliography system 
+\usepackage{graphicx} % allows graphics
+\usepackage{hyperref} % for adding color and clickable links to references
 
-\usepackage[footnotesize]{caption}
-\renewcommand\Affilfont{\small}
-    
-\DeclareMathOperator{\mean}{mean}
-\DeclareMathOperator{\var}{var}
-\DeclareMathOperator{\cov}{cov}
-\DeclareMathOperator{\cow}{cow}
-\DeclareMathOperator{\Corr}{Corr}
-\DeclareMathOperator{\E}{E}
-\DeclareMathOperator{\Ew}{Ew}
-\DeclareMathOperator{\V}{V}
-\DeclareMathOperator{\Tr}{Tr}
-\DeclareMathOperator{\Det}{Det}
-\DeclareMathOperator{\rank}{rank}
-\DeclareMathOperator{\argmax}{argmax}
-\DeclareMathOperator{\plim}{plim}
+% configuration of {hyperref} package
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  citecolor=blue,
+  urlcolor=blue
+}
 
-  
+\usepackage{amsmath} % allows numbered equations, for one thing
+\usepackage{authblk} % to add more authors
+
+\usepackage[paperwidth=7in,paperheight=10in,text={5in,8in},left=1in,top=1in,headheight=0.25in,headsep=0.4in,footskip=0.4in]{geometry}
+% \usepackage[paperwidth=7in,paperheight=10in,text={5in,8in},left=1in,top=1in,headheight=0.25in>,headsep=0.4in,footskip=0.4in]{geometry}
+
+\usepackage[dvipsnames]{xcolor} % adds 68 named colors and the ability to define your own, but can cause trouble with beamer and tikz; tikz must be declared after this
+
+\usepackage{mathpazo} % URW Palladio, from Palatino
+\usepackage{microtype} % cleans up the kerning and hypenation
+\usepackage[margin=15pt,font=small,labelfont={bf,sf}]{caption} % cleans up the structure of the captions
+
+\usepackage{titlesec} % formatting titles
+% qpl - TeX Gyre Pagella
+\titleformat{\section}
+  {\normalfont\fontfamily{qpl}\fontsize{16}{19}\selectfont\scshape}{\thesection}{1em}{}
+\titleformat{\subsection}
+  {\normalfont\fontfamily{qpl}\fontsize{14}{17}\selectfont\scshape}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\normalfont\fontfamily{qpl}\fontsize{14}{17}\selectfont\scshape}{\thesubsubsection}{1em}{}
+
+
+
+
 \title{Evolutionary Decomposition and the Mechanisms of Cultural Change}
 \author[,    1]{Bret A. Beheim\footnote{Corresponding author; beheim@gmail.com.}}
 \author[1]{Ryan Baldini}
@@ -43,17 +46,17 @@
 
 \maketitle
 
-% \pagewiselinenumbers
 \setlength{\parindent}{30pt}
+
 \section{Introduction}
-   
-For the last half-century, many anthropologists and evolutionary biologists have independently realized the fundamental connection between evolutionary theory and cultural change \citep{campbell1965variation, cavalli1981cultural, boyd1985culture, durham1992coevolution, lumsden2005genes, dawkins2006selfish}. Recent decades have witnessed a proliferation of theory regarding the evolution of cultural capacities and traits in humans. Most theorists suppose that culture can be fruitfully studied by imagining it as a set of ``cultural traits," representing socially-learned beliefs and behaviors held by individuals. Cultural evolution, analogous to genetic evolution, occurs when the distribution of these traits changes over time. And as in genetic evolution, we can use mathematical modeling to study the evolutionary mechanisms driving cultural systems. Following this approach, theorists study how natural selection might favor various capacities for social learning, and how these adaptations in turn affect the evolution of behavior and material technology in a population. 
+
+For the last half-century, many anthropologists and evolutionary biologists have independently realized the fundamental connection between evolutionary theory and cultural change \citep{campbell1965variation, cavallisforza1981cultural, boyd1985culture, durham1992coevolution, lumsden2005genes, dawkins2006selfish}. Recent decades have witnessed a proliferation of theory regarding the evolution of cultural capacities and traits in humans. Most theorists suppose that culture can be fruitfully studied by imagining it as a set of ``cultural traits," representing socially-learned beliefs and behaviors held by individuals. Cultural evolution, analogous to genetic evolution, occurs when the distribution of these traits changes over time. And as in genetic evolution, we can use mathematical modeling to study the evolutionary mechanisms driving cultural systems. Following this approach, theorists study how natural selection might favor various capacities for social learning, and how these adaptations in turn affect the evolution of behavior and material technology in a population. 
 
 The hypotheses produced by this large theoretical literature have received relatively modest empirical testing, and most of that in controlled, experimental contexts. Many studies have compared the behavior of subjects in multi-armed bandit or cooperation games to models of various social learning strategies \citep{mcelreath2005applying, efferson2007learning, efferson2008conformists, mcelreath2008beyond, mesoudi2008cultural, eriksson2009people, rendell2011copying}. Other task experiments have progressively removed and replaced participants to create multi-generational ``micro-societies" that mimic the development of cultural or technological traditions \citep{baum2004cultural, caldwell2008studying}.  These experiments reveal how various game conditions affect how players learn from others, and how they transmit information through time and space.
 
 As is always the case with experimental studies, it is difficult to evaluate the external validity of this results of these studies.  With a few exceptions \citep{paciotti2003ultimatum, efferson2007learning, chudek2011prestige}, most such experiments use university students, a highly unusual human subgroup \citep{henrich2010weirdest}. Naturalistic studies of real-world cultural phenomena provide a remedy, but quantitative studies of this kind are rare. Most have successfully tested ``static" hypotheses, investigating how ecological and ethnic contexts predict the distribution of cultural beliefs and behaviors at a single point in time \citep{paciotti2003ultimatum, mcelreath2004social, henrich2010evolution, henrich2011nature}. Absent high-resolution longitudinal data, researchers in this theoretical vein can rarely observe cultural change in real-time \citep{gravlee2009methods}. Surely this is due, in part, to the time costs of acquiring such data; evolutionary processes, even cultural ones, are usually long-term and large-scale. Panel studies and historical records provide the most promising avenue for analysis of modern cultural evolution, and in coming years, large-scale data collection and digitization projects will allow access to massive datasets of unprecedented resolution (e.g.~\citealp{michel2011quantitative}).
 
-One major problem facing researchers of cultural evolution is the lack of a principled, quantitative method that can make sense of long-term trends in high-resolution datasets. Consequently, we do not have a firm understanding of how the simplest demographic and evolutionary processes (e.g. differential fertility, survival, individual learning) shape the relative abundance of particular ideas, behaviors or use of technologies.  The best example we know of that analyzes long-term cultural change in an implicitly evolutionary framework is Hout et al.'s \citeyearpar{hout2001demographic} study of the fertility advantages enjoyed by conservative Protestants in the US over the course of the twentieth century. Such demographic work reminds us that the history of a cultural trait is shaped not only by the spread of information from person to person, but also differential migration, birth and death rates.
+One major problem facing researchers of cultural evolution is the lack of a principled, quantitative method that can make sense of long-term trends in high-resolution datasets. Consequently, we do not have a firm understanding of how the simplest demographic and evolutionary processes (e.g. differential fertility, survival, individual learning) shape the relative abundance of particular ideas, behaviors or use of technologies.  The best example we know of that analyzes long-term cultural change in an implicitly evolutionary framework is \cite{hout2001demographic} study of the fertility advantages enjoyed by conservative Protestants in the US over the course of the twentieth century. Such demographic work reminds us that the history of a cultural trait is shaped not only by the spread of information from person to person, but also differential migration, birth and death rates.
 
 We argue here that an evolutionary-demographic approach, similar to Hout et al.'s, is the right one for general analyses of cultural evolution. Following the recent work of evolutionary demographers \citep{coulson2008dynamics, ozgul2009dynamics}, we present an equation that decomposes the evolution of any mean character into the contributions of various demographic processes - namely, reproductive success, parent-offspring transmission, death, immigration, individual change, and emigration. We assert that the aggregate of these processes completely describes all evolutionary change; hence, our method provides an exact description of evolution in a cultural system.  With sufficient data, the method may reveal which processes have contributed most to the evolution of any character, which are relatively unimportant, and which ``directions" these processes tend to push.
 
@@ -95,7 +98,7 @@ G\Delta \overline{\phi} = b(\overline{\phi}_{R} - \overline{\phi}) + b \overline
 
 As before, the six right-side terms of equation \ref{eq:RTDICE} decompose the change in mean phenotype into the contributions of differential reproductive success, transmission bias, death, immigration, individual change, and emigration, respectively. 
 
-It is worth recognizing that most of the terms in equation \ref{eq:RTDICE} can be expressed as covariances (e.g. $d(\overline{\phi}_D - \overline{\phi}) = \cov(d,\phi)$).  This fact immediately reveals the conceptual connection between our demographic decomposition of evolution and the Price equation \citep{price1970selection}.\footnote{Price's famous theorem shows that, in the notation used above, $G \Delta \overline{\phi} = \cov(w, \phi) + G\overline{\delta}$, where $w$ gives the total number of ``descendants'' produced by an individual.  This is the first and most general evolutionary decomposition equation, and is the starting place for what Sean Rice calls the ``algebra of evolution'' \citep{rice2004evolutionary}. If we ignore migration and treat surviving individuals as their own descendants, we recover Price's theorem from our equation \ref{eq:RTDICE}.}
+It is worth recognizing that most of the terms in equation \ref{eq:RTDICE} can be expressed as covariances (e.g. $d(\overline{\phi}_D - \overline{\phi}) = \mathrm{cov}(d,\phi)$).  This fact immediately reveals the conceptual connection between our demographic decomposition of evolution and the Price equation \citep{price1970selection}.\footnote{Price's famous theorem shows that, in the notation used above, $G \Delta \overline{\phi} = \mathrm{cov}(w, \phi) + G\overline{\delta}$, where $w$ gives the total number of ``descendants'' produced by an individual.  This is the first and most general evolutionary decomposition equation, and is the starting place for what Sean Rice calls the ``algebra of evolution'' \citep{rice2004evolutionary}. If we ignore migration and treat surviving individuals as their own descendants, we recover Price's theorem from our equation \ref{eq:RTDICE}.}
 
 Equation \ref{eq:RTDICE} is true for any measurable character for any population of a sexually reproducing species (and is easily modified for asexual or unisex populations), and provides insight into the nature of the evolutionary forces at work.  A large magnitude RS term, for example, may indicate the operation of fecundity or sexual selection.  The mortality term could be large or small due to viability selection on the phenotype's distribution.  In a genetic context, transmission bias may indicate mutation or meiotic drive, while individual change gives us knowledge of the role of ontogeny.  For culturally-transmitted phenotypes, both the transmission bias and individual change terms may indicate the presence of learning biases.  Emigration and immigration have less connection to Darwinian forces, but may indicate the importance of dispersal or source-sink effects.  In short, provided we have individual-level data, we can use evolutionary decomposition to profile important trends within data straight away (Table \ref{tab:DemoData} \& \ref{tab:DemoDecomp}).  
 
@@ -163,11 +166,11 @@ In our simulation, a population of around 1,000 humans arrives in a resource-ric
 
 Among the settlers, a minority group adheres to a culturally-transmitted worldview we call Snoobism.  Among other aspects of the belief system, Snoob norms celebrate marrying other Snoobs, having large families of Snoob children, and living a safe, healthy and frugal Snoob lifestyle.  Purely for simplicity, we treat this as a discrete, binary trait individuals may acquire or lose in the course of their lifetimes.  Encompassing around a fifth of the original settlers, Snoobism spreads to nearly every member of the population by the final census, twelve generations later.  
 
-Following Ozgul, et al.~\citeyearpar{ozgul2009dynamics}, we contend that evolutionary decomposition can provide a uniquely straightforward understanding of this trend.  If we plug the records of each of the 54 censuses into the RTDICE equation, we produce decomposition terms for each of the 53 values of $\Delta \overline{\phi}$, as in Table \ref{tab:DemoDecomp}.  This information is collected and organized in Figure \ref{fig:Snoob}.
+Following \cite{ozgul2009dynamics}, we contend that evolutionary decomposition can provide a uniquely straightforward understanding of this trend.  If we plug the records of each of the 54 censuses into the RTDICE equation, we produce decomposition terms for each of the 53 values of $\Delta \overline{\phi}$, as in Table \ref{tab:DemoDecomp}.  This information is collected and organized in Figure \ref{fig:Snoob}.
 
 \begin{figure}[t]
 \begin{center} 
-\includegraphics[scale=0.6]{assets/FigSnoobCol.pdf}
+\includegraphics[scale=0.4]{assets/FigSnoobCol.pdf}
 \caption{(a) The population frequency of a binary cultural trait, Snoobism, observed over time, superimposed with the nonzero decomposition terms from the RTDICE equation.  Bars stacked above the Snoob frequency line represent positive magnitudes, and stacked below it, negative.  Since each bar represents one of the terms of equation \ref{eq:RTDICE} (divided by $G$), their sum steers the direction of the frequency line.  For clarity, the bars are exaggerated to the scale in (b), which shows means, 5th, 25th, 75th and 95th percentiles of the observed annual decomposition magnitudes for each term.}
 \label{fig:Snoob}
 \end{center}
@@ -224,7 +227,7 @@ It is important to emphasize what the preceding evolutionary decomposition analy
 
 These answers are readily available from decomposition of mean phenotypic change, regardless of the particularities of the system.  Phenotypes may be discrete values like Snoob status, or continuous, like body weight.  Because the decomposition equation is derived from basic facts about the population and data structure, its value depends not in the realism of its assumptions (which we contend are nearer to axioms), but rather in the meanings we can find in its terms, once strictly defined.  In doing so, three important qualifications must be stressed. 
 
-First, the terms in the decomposition equation segregate but do not correspond exactly to evolutionary processes like sexual selection or biased social learning.  Snoobs may enjoy higher RS because of something inherent in practicing Snoobism, because the trait co-occurs with some other trait like income or age, or simply due to chance. The decomposition terms, most of which are covariances between phenotype and demographic outcomes, are really nothing more that dimensionalized correlations.  Following Rice \citeyearpar{rice2004evolutionary} and Henrich et al. \citeyearpar{henrich2008five}, we feel that terms like ``selection'' or ``fitness'' should only be invoked when a \textit{causal} pathway between phenotype and outcome can be supported, and even then any empirical decomposition term will be a combination of both causal and noncausal associations. 
+First, the terms in the decomposition equation segregate but do not correspond exactly to evolutionary processes like sexual selection or biased social learning.  Snoobs may enjoy higher RS because of something inherent in practicing Snoobism, because the trait co-occurs with some other trait like income or age, or simply due to chance. The decomposition terms, most of which are covariances between phenotype and demographic outcomes, are really nothing more that dimensionalized correlations.  Following \cite{rice2004evolutionary} and \cite{henrich2008five}, we feel that terms like ``selection'' or ``fitness'' should only be invoked when a \textit{causal} pathway between phenotype and outcome can be supported, and even then any empirical decomposition term will be a combination of both causal and noncausal associations. 
 
 Second, the RTDICE decomposition is only one possible partitioning of the observed phenotypic trajectory, and potentially not a very useful one.  For example, the differential mortality between Snoobs and non-Snoobs is partially a consequence of the fact Snoobs tend to be younger, which is a consequence of their differential RS.  We can use logistic models of mortality to establish that Snoob status predicts mortality outcomes even among those of the same age (see ESM), but the RTDICE mortality term cannot isolate this effect from the covariance between Snoobism and age.  If we expect structuring variables like age, gender, ethnic group, or location in a metapopulation will play an important role in the evolution of a particular phenotypic character, we should build this directly into the decomposition equation as appropriate for the dataset and the situation \citep{coulson2008dynamics}.  
 
@@ -236,234 +239,12 @@ In fact, if the population experiences demographic events in discrete seasons, t
 
 We suspect that for large populations in which such demographic events do not follow a strict order, the distortions are minimal.  We can never properly rid ourselves of the problem of order, however, since every death removes the possibility of another birth, emigration event, etc.  For populations which do go through a distinct schedule of demographic events, one possible solution is to construct ordered-event decomposition equations.  
 
-As in Coulson and Tuljapurkar \citeyearpar{coulson2008dynamics}, the RTDICE equation only holds exactly for full census data without error. We realize that probably no dataset of the size and quality comparable to that simulated here exists in reality; real datasets nearly always contain just a sample of the full population and some amount of measurement error. Under circumstances of incomplete data, the terms of the RTDICE equation cannot simply be computed but must instead be estimated by statistical analysis. We anticipate that future research will elucidate the best statistical methods for estimating these terms.
+As in \cite{coulson2008dynamics}, the RTDICE equation only holds exactly for full census data without error. We realize that probably no dataset of the size and quality comparable to that simulated here exists in reality; real datasets nearly always contain just a sample of the full population and some amount of measurement error. Under circumstances of incomplete data, the terms of the RTDICE equation cannot simply be computed but must instead be estimated by statistical analysis. We anticipate that future research will elucidate the best statistical methods for estimating these terms.
 
-Despite these limitations, we foresee a wide variety of applications for the decomposition approach in both evolutionary theory and studying human history.  The decomposition method provides unique advantages in profiling trends, motivating and testing hypotheses, and assisting prediction.  By applying basic demographic bookkeeping to high-resolution records of cultural change over time, we are also able to demonstrate conclusively the Darwinian nature of cultural transmission.    
+Despite these limitations, we foresee a wide variety of applications for the decomposition approach in both evolutionary theory and studying human history.  The decomposition method provides unique advantages in profiling trends, motivating and testing hypotheses, and assisting prediction.  By applying basic demographic bookkeeping to high-resolution records of cultural change over time, we are also able to demonstrate conclusively the Darwinian nature of cultural transmission.
 
-
-
-%\bibliographystyle{te}
-%\bibliography{DecompBib}
-
-\begin{thebibliography}{32}
-
-\newcommand{\enquote}[1]{``#1''}
-\providecommand{\natexlab}[1]{#1}
-\providecommand{\url}[1]{\texttt{#1}}
-\providecommand{\urlprefix}{URL }
-\providecommand{\bibAnnoteFile}[1]{%
-  \IfFileExists{#1}{\begin{quotation}\noindent\textsc{Key:} #1\\
-  \textsc{Annotation:}\ \input{#1}\end{quotation}}{}}
-\providecommand{\bibAnnote}[2]{%
-  \begin{quotation}\noindent\textsc{Key:} #1\\
-  \textsc{Annotation:}\ #2\end{quotation}}
-
-\bibitem[{Baum et~al.(2004)Baum, Richerson, Efferson, and
-  Paciotti}]{baum2004cultural}
-Baum, W.M, P.J. Richerson, C.~Efferson, and B.~Paciotti (2004),
-  \enquote{Cultural evolution in laboratory microsocieties including traditions
-  of rule giving and rule following.} \emph{Evolution and Human Behavior}, 25,
-  305--326.
-\bibAnnoteFile{baum2004cultural}
-
-\bibitem[{Bowles(2006)}]{bowles2006microeconomics}
-Bowles, S. (2006), \emph{Microeconomics: Behavior, Institutions, and
-  Evolution}. Princeton University Press.
-\bibAnnoteFile{bowles2006microeconomics}
-
-\bibitem[{Boyd and Richerson(1985)}]{boyd1985culture}
-Boyd, R. and P.J. Richerson (1985), \emph{Culture and the Evolutionary
-  Process}. University of Chicago Press.
-\bibAnnoteFile{boyd1985culture}
-
-\bibitem[{Caldwell and Millen(2008)}]{caldwell2008studying}
-Caldwell, C.A. and A.E. Millen (2008), \enquote{Studying cumulative cultural
-  evolution in the laboratory.} \emph{Philosophical Transactions of the Royal
-  Society B: Biological Sciences}, 363, 3529.
-\bibAnnoteFile{caldwell2008studying}
-
-\bibitem[{Campbell(1965)}]{campbell1965variation}
-Campbell, D.T. (1965), \enquote{Variation and selective retention in
-  socio-cultural evolution.} In \emph{Social Change in Developing Areas: A
-  Reinterpretation of Evolutionary Theory} (H.R. Barringer, G.I. Blanksten, and
-  R.W. Mack, eds.), 19--49, Schenkman.
-\bibAnnoteFile{campbell1965variation}
-
-\bibitem[{Cavalli-Sforza and Feldman(1981)}]{cavalli1981cultural}
-Cavalli-Sforza, L.L. and M.W. Feldman (1981), \emph{Cultural Transmission and
-  Evolution: A Quantitative Approach}. Princeton University Press.
-\bibAnnoteFile{cavalli1981cultural}
-
-\bibitem[{Chudek et~al.(2011)Chudek, Heller, Birch, and
-  Henrich}]{chudek2011prestige}
-Chudek, M., S.~Heller, S.~Birch, and J.~Henrich (2011),
-  \enquote{Prestige-biased cultural learning: Bystander's differential
-  attention to potential models influences children's learning.}
-  \emph{Evolution and Human Behavior}.
-\bibAnnoteFile{chudek2011prestige}
-
-\bibitem[{Coulson and Tuljapurkar(2008)}]{coulson2008dynamics}
-Coulson, T. and S.~Tuljapurkar (2008), \enquote{The dynamics of a quantitative
-  trait in an age-structured population living in a variable environment.}
-  \emph{The American Naturalist}, 172, 599--612.
-\bibAnnoteFile{coulson2008dynamics}
-
-\bibitem[{Dawkins(2006)}]{dawkins2006selfish}
-Dawkins, R. (2006), \emph{The Selfish Gene}. Oxford University Press.
-\bibAnnoteFile{dawkins2006selfish}
-
-\bibitem[{Durham(1992)}]{durham1992coevolution}
-Durham, W.H (1992), \emph{Coevolution: Genes, Culture, and Human Diversity}.
-  Stanford University Press.
-\bibAnnoteFile{durham1992coevolution}
-
-\bibitem[{Efferson et~al.(2008)Efferson, Lalive, Richerson, McElreath, and
-  Lubell}]{efferson2008conformists}
-Efferson, C., R.~Lalive, P.J. Richerson, R.~McElreath, and M.~Lubell (2008),
-  \enquote{Conformists and mavericks: The empirics of frequency-dependent
-  cultural transmission.} \emph{Evolution and Human Behavior}, 29, 56--64.
-\bibAnnoteFile{efferson2008conformists}
-
-\bibitem[{Efferson et~al.(2007)Efferson, Richerson, McElreath, Lubell, Edsten,
-  Waring, Paciotti, and Baum}]{efferson2007learning}
-Efferson, C., P.J. Richerson, R.~McElreath, M.~Lubell, E.~Edsten, T.M. Waring,
-  B.~Paciotti, and W.~Baum (2007), \enquote{Learning, productivity, and noise:
-  An experimental study of cultural transmission on the bolivian altiplano.}
-  \emph{Evolution and Human Behavior}, 28, 11--17.
-\bibAnnoteFile{efferson2007learning}
-
-\bibitem[{Eriksson and Coultas(2009)}]{eriksson2009people}
-Eriksson, K. and J.C. Coultas (2009), \enquote{Are people really
-  conformist-biased? an empirical test and a new mathematical model.}
-  \emph{Journal of Evolutionary Psychology}, 7, 5--21.
-\bibAnnoteFile{eriksson2009people}
-
-\bibitem[{Gravlee et~al.(2009)Gravlee, Kennedy, Godoy, and
-  Leonard}]{gravlee2009methods}
-Gravlee, C.C., D.P. Kennedy, R.~Godoy, and W.R. Leonard (2009),
-  \enquote{Methods for collecting panel data: What can cultural anthropology
-  learn from other disciplines?} \emph{Journal of Anthropological Research},
-  65, 453--483.
-\bibAnnoteFile{gravlee2009methods}
-
-\bibitem[{Henrich et~al.(2008)Henrich, Boyd, and Richerson}]{henrich2008five}
-Henrich, J., R.~Boyd, and P.J. Richerson (2008), \enquote{Five
-  misunderstandings about cultural evolution.} \emph{Human Nature}, 19,
-  119--137.
-\bibAnnoteFile{henrich2008five}
-
-\bibitem[{Henrich and Broesch(2011)}]{henrich2011nature}
-Henrich, J. and J.~Broesch (2011), \enquote{On the nature of cultural
-  transmission networks: Evidence from fijian villages for adaptive learning
-  biases.} \emph{Philosophical Transactions of the Royal Society B: Biological
-  Sciences}, 366, 1139--1148.
-\bibAnnoteFile{henrich2011nature}
-
-\bibitem[{Henrich et~al.(2010)Henrich, Heine, and
-  Norenzayan}]{henrich2010weirdest}
-Henrich, J., S.J. Heine, and A.~Norenzayan (2010), \enquote{The weirdest people
-  in the world?} \emph{Behavioral and Brain Sciences}, 33, 61--83.
-\bibAnnoteFile{henrich2010weirdest}
-
-\bibitem[{Henrich and Henrich(2010)}]{henrich2010evolution}
-Henrich, J. and N.~Henrich (2010), \enquote{The evolution of cultural
-  adaptations: Fijian food taboos protect against dangerous marine toxins.}
-  \emph{Proceedings of the Royal Society B: Biological Sciences}, 277,
-  3715--3724.
-\bibAnnoteFile{henrich2010evolution}
-
-\bibitem[{Hout et~al.(2001)Hout, Greeley, and Wilde}]{hout2001demographic}
-Hout, M., A.~Greeley, and M.J. Wilde (2001), \enquote{The demographic
-  imperative in religious change in the united states.} \emph{American Journal
-  of Sociology}, 107, 468--500.
-\bibAnnoteFile{hout2001demographic}
-
-\bibitem[{Lumsden and Wilson(2005)}]{lumsden2005genes}
-Lumsden, C.J. and E.O. Wilson (2005), \emph{Genes, Mind, and Culture: The
-  Coevolutionary Process}. World Scientific Publishing Company.
-\bibAnnoteFile{lumsden2005genes}
-
-\bibitem[{McElreath(2004)}]{mcelreath2004social}
-McElreath, R. (2004), \enquote{Social learning and the maintenance of cultural
-  variation: An evolutionary model and data from east africa.} \emph{American
-  Anthropologist}, 106, 308--321.
-\bibAnnoteFile{mcelreath2004social}
-
-\bibitem[{McElreath et~al.(2008)McElreath, Bell, Efferson, Lubell, Richerson,
-  and Waring}]{mcelreath2008beyond}
-McElreath, R., A.V. Bell, C.~Efferson, M.~Lubell, P.J. Richerson, and T.~Waring
-  (2008), \enquote{Beyond existence and aiming outside the laboratory:
-  Estimating frequency-dependent and payoff-biased social learning strategies.}
-  \emph{Philosophical Transactions of the Royal Society B: Biological
-  Sciences}, 363, 3515--3528.
-\bibAnnoteFile{mcelreath2008beyond}
-
-\bibitem[{McElreath et~al.(2005)McElreath, Lubell, Richerson, Waring, Baum,
-  Edsten, Efferson, and Paciotti}]{mcelreath2005applying}
-McElreath, R., M.~Lubell, P.J. Richerson, T.M. Waring, W.~Baum, E.~Edsten,
-  C.~Efferson, and B.~Paciotti (2005), \enquote{Applying evolutionary models to
-  the laboratory study of social learning.} \emph{Evolution and Human
-  Behavior}, 26, 483--508.
-\bibAnnoteFile{mcelreath2005applying}
-
-\bibitem[{Mesoudi and O'brien(2008)}]{mesoudi2008cultural}
-Mesoudi, A. and M.J. O'brien (2008), \enquote{The cultural transmission of
-  great basin projectile-point technology i: An experimental simulation.}
-  \emph{American Antiquity}, 3--28.
-\bibAnnoteFile{mesoudi2008cultural}
-
-\bibitem[{Michel et~al.(2011)Michel, Shen, Aiden, Veres, Gray, Pickett,
-  Hoiberg, Clancy, Norvig, and Orwant}]{michel2011quantitative}
-Michel, J.B., Y.K. Shen, A.P. Aiden, A.~Veres, M.K. Gray, J.P. Pickett,
-  D.~Hoiberg, D.~Clancy, P.~Norvig, and J.~Orwant (2011), \enquote{Quantitative
-  analysis of culture using millions of digitized books.} \emph{Science}, 331,
-  176.
-\bibAnnoteFile{michel2011quantitative}
-
-\bibitem[{Ozgul et~al.(2009)Ozgul, Tuljapurkar, Benton, Pemberton,
-  Clutton-Brock, and Coulson}]{ozgul2009dynamics}
-Ozgul, A., S.~Tuljapurkar, T.G. Benton, J.N. Pemberton, T.H. Clutton-Brock, and
-  T.~Coulson (2009), \enquote{The dynamics of phenotypic change and the
-  shrinking sheep of st. kilda.} \emph{Science}, 325, 464.
-\bibAnnoteFile{ozgul2009dynamics}
-
-\bibitem[{Paciotti and Hadley(2003)}]{paciotti2003ultimatum}
-Paciotti, B. and C.~Hadley (2003), \enquote{The ultimatum game among sympatric
-  ethnic groups in southwestern tanzania: Ethnic variation and institutional
-  scope.} \emph{Current Anthropology}, 44, 427--432.
-\bibAnnoteFile{paciotti2003ultimatum}
-
-\bibitem[{Price(1970)}]{price1970selection}
-Price, G.~R. (1970), \enquote{Selection and covariance.} \emph{Nature}, 227,
-  520--521.
-\bibAnnoteFile{price1970selection}
-
-\bibitem[{Rendell et~al.(2011)Rendell, Boyd, Enquist, Feldman, Fogarty, and
-  Laland}]{rendell2011copying}
-Rendell, L., R.~Boyd, M.~Enquist, M.W. Feldman, L.~Fogarty, and K.N. Laland
-  (2011), \enquote{How copying affects the amount, evenness and persistence of
-  cultural knowledge: insights from the social learning strategies tournament.}
-  \emph{Philosophical Transactions of the Royal Society B: Biological
-  Sciences}, 366, 1118--1128.
-\bibAnnoteFile{rendell2011copying}
-
-\bibitem[{Rice(2004)}]{rice2004evolutionary}
-Rice, S.H. (2004), \emph{Evolutionary Theory: Mathematical and Conceptual
-  Foundations}. Sinauer Associates Sunderland.
-\bibAnnoteFile{rice2004evolutionary}
-
-\bibitem[{Richerson and Boyd(2005)}]{richerson2005not}
-Richerson, P.J. and R.~Boyd (2005), \emph{Not by Genes Alone: How Culture
-  Transformed Human Evolution}. University of Chicago Press.
-\bibAnnoteFile{richerson2005not}
-
-\bibitem[{Stark(1996)}]{stark1996rise}
-Stark, R. (1996), \emph{The Rise of Christianity: A Sociologist Reconsiders
-  History}. Princeton University Press.
-\bibAnnoteFile{stark1996rise}
-
-\end{thebibliography}
-
+\bibliographystyle{apalike}
+\bibliography{references}
 
 \end{document}
 
